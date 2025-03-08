@@ -1,0 +1,26 @@
+<svg width="300" height="200" viewBox="0 0 600 400" xmlns="http://www.w3.org/2000/svg">
+  <rect width="600" height="300" fill="transparent"/>
+
+  <!-- "astr" text -->
+  <text x="90" y="170" font-family="'Poppins', sans-serif" font-size="80" font-weight="bold" fill="white">
+    astr
+  </text>
+
+  <!-- Crescent Moon -->
+  <circle cx="255" cy="145" r="25" fill="white"/>
+  <circle cx="252" cy="145" r="23" fill="black"/>
+
+  <!-- "N" -->
+  <text x="280" y="170" font-family="'Poppins', sans-serif" font-size="80" font-weight="bold" fill="white">
+    N
+  </text>
+
+  <!-- Planet "O" with tilted ring -->
+  <circle cx="365" cy="145" r="20" fill="white"/>
+  <ellipse cx="365" cy="145" rx="28" ry="10" fill="none" stroke="white" stroke-width="2" transform="rotate(-15 355 145)"/>
+
+  <!-- "W.AI" -->
+  <text x="395" y="170" font-family="'Poppins', sans-serif" font-size="80" font-weight="bold" fill="white">
+    w.AI
+  </text>
+</svg>
