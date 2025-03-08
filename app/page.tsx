@@ -364,10 +364,10 @@ function RecentBlogPosts() {
     );
 }
 
-const handleScroll = (e, targetId) => {
+const handleScroll = (e: React.MouseEvent<HTMLAnchorElement>, targetId: string) => {
     e.preventDefault();
     const target = document.getElementById(targetId);
     if (target) {
-        target.scrollIntoView({behavior: "smooth", block: "start"});
+        target.scrollIntoView({ behavior: "smooth", block: "start" });
     }
 };
