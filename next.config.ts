@@ -1,10 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
     reactStrictMode: true,
-    output: "export", // Required for Netlify
-    trailingSlash: true, // Fixes static routing issues
+    output: "export", // Enables static export
+    trailingSlash: true, // Ensures proper routing
 };
 
 export default nextConfig;
