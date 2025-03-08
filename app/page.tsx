@@ -202,7 +202,7 @@ function Mission() {
                 <p className="mt-4 text-lg font-inter font-medium">
                     At AstroNowAI, we believe in harnessing the power of AI to provide accurate, unbiased,
                     and deeply insightful astrological guidance. Our mission is to empower individuals
-                    with clarity and confidence, helping them navigate their life's journey with wisdom.
+                    with clarity and confidence, helping them navigate their lifes journey with wisdom.
                 </p>
             </div>
         </div>
