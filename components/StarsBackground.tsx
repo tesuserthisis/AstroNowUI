@@ -2,6 +2,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import Particles from "react-tsparticles";
 import { loadSlim } from "tsparticles-slim";
+import { Engine } from "tsparticles-engine";
 
 const StarsBackground = () => {
     const [isClient, setIsClient] = useState(false);
@@ -10,7 +11,7 @@ const StarsBackground = () => {
         setIsClient(true);
     }, []);
 
-    const particlesInit = useCallback(async (engine) => {
+    const particlesInit = useCallback(async (engine: Engine) => {
         await loadSlim(engine);
     }, []);
 
