@@ -89,7 +89,7 @@ const astrologers = [
 
 export default function Home() {
     return (
-        <div className="bg-black">
+        <div>
             <Head>
                 <title>AstroNow.AI - Your Cosmic Guide</title>
             </Head>
@@ -296,7 +296,7 @@ function PricingPlans() {
                             <ul className="mb-6 text-left font-inter font-regular">
                                 {plan.features.map((feature, i) => (
                                     <li key={i} className="flex items-center gap-2 mb-2">
-                                        <CheckCircle className="text-green-400" size={18}/> {feature}
+                                        <CheckCircle className="text-green-400" size={20}/> {feature}
                                     </li>
                                 ))}
                             </ul>

@@ -1,67 +1,58 @@
-"use client";
-import React, { useCallback, useEffect, useState } from "react";
-import Particles from "react-tsparticles";
-import { loadSlim } from "tsparticles-slim";
-import { Engine } from "tsparticles-engine";
+import React, {ReactNode} from "react";
+import "./StarryBackground.css";
 
-const StarsBackground = () => {
-    const [isClient, setIsClient] = useState(false);
-
-    useEffect(() => {
-        setIsClient(true);
-    }, []);
-
-    const particlesInit = useCallback(async (engine: Engine) => {
-        await loadSlim(engine);
-    }, []);
-
-    if (!isClient) return null;
-
-    return (
-        <div className="absolute top-0 left-0 w-full h-1/2 overflow-hidden pointer-events-none">
-            <Particles
-                id="tsparticles"
-                init={particlesInit}
-                options={{
-                    fullScreen: { enable: false }, // Disable full screen to control height
-                    background: { color: "transparent" }, // Keep background transparent
-                    particles: {
-                        number: { value: 70, density: { enable: true, area: 1000 } },
-                        shape: { type: ["circle", "star"] },
-                        opacity: {
-                            value: 1,
-                            random: true,
-                            animation: { enable: true, speed: 0.5, minimumValue: 0.3, sync: false },
-                        },
-                        size: {
-                            value: { min: 1, max: 6 },
-                            random: true,
-                            animation: { enable: true, speed: 3, minimumValue: 0.5, sync: false },
-                        },
-                        move: {
-                            enable: true,
-                            speed: 0.2,
-                            direction: "none",
-                            outModes: "out",
-                            random: true,
-                        },
-                        links: {
-                            enable: true,
-                            distance: 120,
-                            color: "#ffffff",
-                            opacity: 0.2,
-                            width: 1,
-                        },
-                    },
-                    interactivity: {
-                        events: { onHover: { enable: true, mode: "bubble" } },
-                        modes: { bubble: { distance: 100, size: 10 } },
-                    },
+const generateStars = (numStars: number ) => {
+    const stars = [];
+    for (let i = 0; i < numStars; i++) {
+        const size = Math.random() * 3 + "px";
+        stars.push(
+            <span
+                key={i}
+                style={{
+                    width: size,
+                    height: size,
+                    top: Math.random() * 100 + "vh",
+                    left: Math.random() * 100 + "vw",
+                    animationDelay: Math.random() * 5 + "s",
                 }}
-                className="w-full h-full"
             />
+        );
+    }
+    return stars;
+};
+
+const generateGlowingCircles = (numCircles: number) => {
+    const circles = [];
+    for (let i = 0; i < numCircles; i++) {
+        const size = Math.random() * 200 + 50 + "px"; // Large glow effect
+        circles.push(
+            <div
+                key={i}
+                style={{
+                    width: size,
+                    height: size,
+                    top: Math.random() * 100 + "vh",
+                    left: Math.random() * 100 + "vw",
+                    animationDelay: Math.random() * 5 + "s",
+                }}
+            />
+        );
+    }
+    return circles;
+};
+
+interface StarryBackgroundProps {
+    children?: ReactNode; // Explicitly type children as ReactNode
+}
+
+const StarryBackground: React.FC<StarryBackgroundProps> = ({ children }) => {
+    return (
+        <div className="starry-background">
+            <div className="stars">{generateStars(100)}</div>
+            <div className="glowing-circles">{generateGlowingCircles(8)}</div>
+            {children}
         </div>
     );
 };
 
-export default StarsBackground;
+export default StarryBackground;
