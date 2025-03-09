@@ -91,7 +91,7 @@ export default function Home() {
     return (
         <div className="bg-black">
             <Head>
-                <title>AstroNowAI - Your Cosmic Guide</title>
+                <title>AstroNow.AI - Your Cosmic Guide</title>
             </Head>
 
             <StarsBackground/>
@@ -140,10 +140,10 @@ function NavBar() {
 function Hero() {
     return <header className="h-screen flex flex-col items-center justify-center text-center">
         <h2 style={{letterSpacing: '0.2px'}} className="text-[64px] font-playfair max-w-5xl">
-            AstroNowAI – Your Cosmic Guide, Instantly
+            AstroNow.AI – Your Cosmic Guide, Instantly
         </h2>
         <p style={{letterSpacing: '0.2px'}} className="mt-4 text-[16px] max-w-5xl font-poppins font-medium">
-            AstroNowAI provides 24/7 AI-driven astrology readings, offering deep insights into your health,
+            AstroNow.AI provides 24/7 AI-driven astrology readings, offering deep insights into your health,
             career, finances, and love life. No human bias, no fear-mongering—just accurate, private, and
             personalized cosmic guidance at your fingertips!
         </p>
@@ -157,7 +157,7 @@ function Feature() {
 
         {/* Title and description */}
         <h2 style={{letterSpacing: '0.2px'}} className="text-[48px] font-playfair font-normal relative z-10">What is
-            AstroNowAI?</h2>
+            AstroNow.AI?</h2>
         <p className="mt-4 text-lg max-w-2xl mx-auto relative z-10 font-dm-sans">
             AstroNowAl is a revolutionary AI-powered astrology platform designed to bring you accurate and
             personalized astrological insights anytime, anywhere. Using your unique birth chart, our AI
@@ -200,7 +200,7 @@ function Mission() {
             <div className="md:w-3/5">
                 <h2 style={{letterSpacing: '0.2px'}} className="text-[48px] font-playfair font-regular">Our Mission</h2>
                 <p className="mt-4 text-lg font-inter font-medium">
-                    At AstroNowAI, we believe in harnessing the power of AI to provide accurate, unbiased,
+                    At AstroNow.AI, we believe in harnessing the power of AI to provide accurate, unbiased,
                     and deeply insightful astrological guidance. Our mission is to empower individuals
                     with clarity and confidence, helping them navigate their lifes journey with wisdom.
                 </p>
@@ -265,7 +265,7 @@ function AstrologersSection() {
 function Footer() {
     return (
         <footer className="p-6 text-center">
-            <p>© 2025 AstroNowAI. All rights reserved.</p>
+            <p>© 2025 AstroNow.AI. All rights reserved.</p>
             <div className="mt-4 space-x-4">
                 <a href="#">Privacy Policy</a>
                 <a href="#">Terms</a>
@@ -280,7 +280,7 @@ function PricingPlans() {
         <section id="pricing" className="text-white py-16 px-8 text-center">
             <h2 className="text-[48px] font-playfair regular mb-4">Pricing Plans</h2>
             <p className="mb-8 max-w-2xl mx-auto font-poppins font-medium">
-                At AstroNowAI, we offer flexible plans designed to provide you with AI-powered astrological insights
+                At AstroNow.AI, we offer flexible plans designed to provide you with AI-powered astrological insights
                 tailored to your needs.
             </p>
             <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
