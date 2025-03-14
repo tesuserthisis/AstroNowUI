@@ -1,10 +1,11 @@
 "use client"; // Mark this as a Client Component
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import Head from "next/head";
 import {ChevronLeft, ChevronRight} from "lucide-react";
 import StarsBackground from "../components/StarsBackground";
 import {motion} from "framer-motion";
 import {CheckCircle} from "lucide-react";
+import { FaInstagram, FaXTwitter } from "react-icons/fa6";
 
 const blogPosts = [
     {
@@ -38,6 +39,7 @@ const plans = [
         name: "Basic plan",
         image: "./basic_price.svg",
         price: "$10/mth",
+        priceINR: "₹800/mth",
         features: [
             "Daily horoscope based on your zodiac sign",
             "General astrology updates and forecasts",
@@ -48,6 +50,7 @@ const plans = [
         name: "Premium plan",
         image: "./prem_price.svg",
         price: "$9.99/mth",
+        priceINR: "₹800/mth",
         features: [
             "Everything in the Starter Plan",
             "Personalized daily horoscope",
@@ -58,6 +61,7 @@ const plans = [
         name: "Elite plan",
         image: "./elite_price.svg",
         price: "$19.99/mth",
+        priceINR: "₹800/mth",
         features: [
             "Everything in the Premium Plan",
             "AI-generated detailed birth chart reading",
@@ -264,18 +268,71 @@ function AstrologersSection() {
 
 function Footer() {
     return (
-        <footer className="p-6 text-center">
-            <p>© 2025 AstroNow.AI. All rights reserved.</p>
-            <div className="mt-4 space-x-4">
-                <a href="#">Privacy Policy</a>
-                <a href="#">Terms</a>
-                <a href="#">Contact Us</a>
+        <footer className="bg-black text-white py-6 px-4">
+            <div className=" mx-auto flex flex-col md:flex-row justify-between items-start">
+                {/* Left Side - Logo and Social Media */}
+                <div className="flex flex-col items-center md:items-start">
+                    <img src="/logo.svg" alt="AstroNow.AI" />
+                    <div className="flex gap-4">
+                        <a href="#" className="text-xl hover:text-gray-400">
+                            <FaInstagram />
+                        </a>
+                        <a href="#" className="text-xl hover:text-gray-400">
+                            <FaXTwitter />
+                        </a>
+                    </div>
+                </div>
+
+                {/* Right Side - Navigation Links */}
+                <nav className="flex flex-wrap justify-center gap-4 mt-6 md:mt-0 text-sm">
+                    <a href="#" className="hover:text-gray-400 font-poppins font-semibold">Home</a>
+                    <a href="#" className="hover:text-gray-400 font-poppins font-semibold">About us</a>
+                    <a href="#" className="hover:text-gray-400 font-poppins font-semibold">Privacy and policy</a>
+                    <a href="#" className="hover:text-gray-400 font-poppins font-semibold">FAQs</a>
+                    <a href="#" className="hover:text-gray-400 font-poppins font-semibold">Terms and condition</a>
+                    <a href="#" className="hover:text-gray-400 font-poppins font-semibold">Contact us</a>
+                </nav>
+            </div>
+
+            {/* Bottom Section - Copyright and Links */}
+            <div className="border-t border-gray-700 mt-6 pt-4 text-center text-sm">
+                <p>&copy; 2025 astronow.ai All rights reserved.</p>
+                <div className="flex justify-center gap-4 mt-2">
+                    <a href="#" className="hover:text-gray-400 font-poppins font-semibold">Terms</a>
+                    <a href="#" className="hover:text-gray-400 font-poppins font-semibold">Privacy</a>
+                </div>
             </div>
         </footer>
     );
 }
 
 function PricingPlans() {
+    const [currency, setCurrency] = useState("USD");
+
+    useEffect(() => {
+        const fetchLocation = async () => {
+            try {
+                const token = process.env.NEXT_PUBLIC_IPINFO_TOKEN;
+                if (!token) {
+                    console.error("IPINFO token is missing!");
+                    return;
+                }
+
+                const response = await fetch(`https://ipinfo.io/json?token=${token}`);
+                const data = await response.json();
+
+                if (data.country === "IN") {
+                    setCurrency("INR");
+                }
+            } catch (error) {
+                console.error("Error fetching location:", error);
+                setCurrency("USD"); // Default to USD in case of error
+            }
+        };
+
+        fetchLocation();
+    }, []);
+
     return (
         <section id="pricing" className="text-white py-16 px-8 text-center">
             <h2 className="text-[48px] font-playfair regular mb-4">Pricing Plans</h2>
@@ -290,13 +347,15 @@ function PricingPlans() {
                         className="border-2 border-white text-white p-6 rounded-2xl shadow-lg flex flex-col justify-between h-full"
                     >
                         <div>
-                            <img className="mx-auto my-4" src={plan.image} alt={plan.name}/>
+                            <img className="mx-auto my-4" src={plan.image} alt={plan.name} />
                             <h3 className="text-xl font-semibold mb-2 font-inter">{plan.name}</h3>
-                            <p className="text-2xl font-bold mb-4 font-inter">{plan.price}</p>
+                            <p className="text-2xl font-bold mb-4 font-inter">
+                                {currency === "INR" ? plan.priceINR : plan.price}
+                            </p>
                             <ul className="mb-6 text-left font-inter font-regular">
                                 {plan.features.map((feature, i) => (
                                     <li key={i} className="flex items-center gap-2 mb-2">
-                                        <CheckCircle className="text-green-400" size={20}/> {feature}
+                                        <CheckCircle className="text-green-400" size={20} /> {feature}
                                     </li>
                                 ))}
                             </ul>
@@ -310,7 +369,6 @@ function PricingPlans() {
         </section>
     );
 }
-
 
 function RecentBlogPosts() {
     return (
