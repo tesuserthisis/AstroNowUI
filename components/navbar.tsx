@@ -1,4 +1,5 @@
 import React from "react";
+import {signIn} from "next-auth/react";
 
 export default function NavBar() {
     return <nav className="flex items-center justify-between ">
@@ -22,7 +23,8 @@ export default function NavBar() {
         {/* Right - Login Button (Compact) */}
         <div className="-mt-10">
             <button style={{borderColor: "#d3d3d3"}}
-                    className="border bordcol px-6 py-1 rounded-full text-white text-sm font-inter font-semibold mx-16">
+                    onClick={() => signIn("google")} // Trigger Google login
+                    className="border bordcol px-6 py-1 rounded-full text-white text-sm font-inter font-semibold mx-16 cursor-pointer">
                 Login
             </button>
         </div>
