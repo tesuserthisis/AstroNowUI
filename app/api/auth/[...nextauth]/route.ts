@@ -2,6 +2,7 @@ import NextAuth, { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import { JWT } from "next-auth/jwt";
 import { Session, User } from "next-auth";
+import axios from "axios";
 
  const authOptions: NextAuthOptions = {
     providers: [
@@ -13,6 +14,14 @@ import { Session, User } from "next-auth";
     callbacks: {
         async signIn({ user }: { user: User }) {
             console.log("User signed in:", user);
+            try {
+                await axios.post("https://astronowai.fly.dev/user-info/setup", {
+                    email: user.email,
+                });
+            } catch (error) {
+                console.error("Error saving user info:", error);
+                return false;
+            }
             return true;
         },
         async redirect({ url, baseUrl }: { url: string; baseUrl: string }) {
