@@ -70,7 +70,7 @@ function Footer() {
                 {/* Left Side - Logo and Social Media */}
                 <div className="flex flex-col items-center md:items-start">
                     <img src="/logo.svg" alt="AstroNow.AI" />
-                    <div className="flex gap-4">
+                    <div className="flex gap-4 mx-10">
                         <a href="#" className="text-xl hover:text-gray-400">
                             <FaInstagram />
                         </a>
@@ -81,7 +81,7 @@ function Footer() {
                 </div>
 
                 {/* Right Side - Navigation Links */}
-                <nav className="flex flex-wrap justify-center gap-4 mt-6 md:mt-0 text-sm">
+                <nav className="flex flex-wrap justify-center gap-4 my-10 mx-10 text-sm">
                     <a href="#" className="hover:text-gray-400 font-poppins font-semibold">Home</a>
                     <a href="#" className="hover:text-gray-400 font-poppins font-semibold">About us</a>
                     <a href="#" className="hover:text-gray-400 font-poppins font-semibold">Privacy and policy</a>
@@ -93,11 +93,7 @@ function Footer() {
 
             {/* Bottom Section - Copyright and Links */}
             <div className="border-t border-gray-700 mt-6 pt-4 text-center text-sm">
-                <p>&copy; 2025 astronow.ai All rights reserved.</p>
-                <div className="flex justify-center gap-4 mt-2">
-                    <a href="#" className="hover:text-gray-400 font-poppins font-semibold">Terms</a>
-                    <a href="#" className="hover:text-gray-400 font-poppins font-semibold">Privacy</a>
-                </div>
+                <p className="font-poppins font-semibold">&copy; 2025 astronow.ai All rights reserved.</p>
             </div>
         </footer>
     );
