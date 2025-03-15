@@ -2,6 +2,7 @@
     position: fixed;
     width: 100vw;
     height: 100vh;
+    background-color: black;
     overflow: hidden;
     z-index: -1; /* 👈 Keeps background behind other content */
     top: 0;
