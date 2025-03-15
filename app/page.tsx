@@ -31,10 +31,10 @@ export default function Home() {
 
 function Hero() {
     return <header className="h-screen flex flex-col items-center justify-center text-center">
-        <h2 style={{letterSpacing: '0.2px'}} className="text-[64px] font-playfair max-w-5xl">
+        <h2 style={{letterSpacing: '0.2px'}} className="text-[64px] text-white font-playfair max-w-5xl">
             AstroNow.AI – Your Cosmic Guide, Instantly
         </h2>
-        <p style={{letterSpacing: '0.2px'}} className="mt-4 text-[16px] max-w-5xl font-poppins font-medium">
+        <p style={{letterSpacing: '0.2px'}} className="mt-4 text-[16px] max-w-5xl text-white font-poppins font-medium">
             AstroNow.AI provides 24/7 AI-driven astrology readings, offering deep insights into your health,
             career, finances, and love life. No human bias, no fear-mongering—just accurate, private, and
             personalized cosmic guidance at your fingertips!
