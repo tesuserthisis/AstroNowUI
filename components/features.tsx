@@ -3,7 +3,7 @@ import React from "react";
 export default function Feature() {
     return <section id="features" className="text-white text-center relative py-10">
         {/* Background with stars effect */}
-        <div className="absolute inset-0 bg-[url('/stars-bg.png')] bg-cover bg-center opacity-30"></div>
+        <div className="absolute inset-0 opacity-30"></div>
 
         {/* Title and description */}
         <h2 style={{letterSpacing: '0.2px'}} className="text-[48px] font-playfair font-normal relative z-10">What is
