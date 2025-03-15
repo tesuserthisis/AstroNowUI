@@ -16,7 +16,7 @@ import { Session, User } from "next-auth";
             return true;
         },
         async redirect({ url, baseUrl }: { url: string; baseUrl: string }) {
-            return url.includes("signout") ? baseUrl : `${baseUrl}/dashboard`;
+            return url.includes("signout") ? baseUrl : `${baseUrl}`;
         },
         async jwt({ token, user }: { token: JWT; user?: User }) {
             if (user) {

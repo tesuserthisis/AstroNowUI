@@ -1,7 +1,9 @@
 import React from "react";
-import {signIn} from "next-auth/react";
+import {signIn, signOut, useSession} from "next-auth/react";
 
 export default function NavBar() {
+    const {data: session} = useSession();
+
     return <nav className="flex items-center justify-between ">
         {/* Left - Logo */}
         <div>
@@ -22,11 +24,19 @@ export default function NavBar() {
 
         {/* Right - Login Button (Compact) */}
         <div className="-mt-10">
-            <button style={{borderColor: "#d3d3d3"}}
-                    onClick={() => signIn("google")} // Trigger Google login
-                    className="border bordcol px-6 py-1 rounded-full text-white text-sm font-inter font-semibold mx-16 cursor-pointer">
-                Login
-            </button>
+            {session ? (
+                <button style={{borderColor: "#d3d3d3"}}
+                        onClick={() => signOut({callbackUrl: "/signout"})} // Trigger Google login
+                        className="border bordcol px-6 py-1 rounded-full text-white text-sm font-inter font-semibold mx-16 cursor-pointer">
+                    Sign Out
+                </button>
+            ) : (
+                <button style={{borderColor: "#d3d3d3"}}
+                        onClick={() => signIn("google")} // Trigger Google login
+                        className="border bordcol px-6 py-1 rounded-full text-white text-sm font-inter font-semibold mx-16 cursor-pointer">
+                    Login
+                </button>
+            )}
         </div>
     </nav>;
 }
@@ -35,7 +45,7 @@ const handleScroll = (e: React.MouseEvent<HTMLAnchorElement>, targetId: string) 
     e.preventDefault();
     const target = document.getElementById(targetId);
     if (target) {
-        target.scrollIntoView({ behavior: "smooth", block: "start" });
+        target.scrollIntoView({behavior: "smooth", block: "start"});
     }
 };
 
