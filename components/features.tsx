@@ -6,8 +6,7 @@ export default function Feature() {
         <div className="absolute inset-0 opacity-30"></div>
 
         {/* Title and description */}
-        <h2 style={{letterSpacing: '0.2px'}} className="text-[48px] font-playfair font-normal relative z-10">What is
-            AstroNow.AI?</h2>
+        <h2 style={{letterSpacing: '0.2px'}} className="text-[48px] font-playfair font-normal relative z-10">What is AstroNow.AI?</h2>
         <p className="mt-4 text-lg max-w-2xl mx-auto relative z-10 font-dm-sans">
             AstroNowAl is a revolutionary AI-powered astrology platform designed to bring you accurate and
             personalized astrological insights anytime, anywhere. Using your unique birth chart, our AI
@@ -19,19 +18,19 @@ export default function Feature() {
         <div className="mt-12 flex flex-wrap justify-center gap-8 relative z-10">
             {/* Feature 1 */}
             <div className="max-w-xs text-center">
-                <img src="/feat1.png" alt="AI-driven accuracy" className="rounded-full w-40 h-40 mx-auto"/>
+                <img src="/whatis_one.jpg" alt="AI-driven accuracy" className="rounded-full w-40 h-40 mx-auto"/>
                 <p className="mt-4 font-inter">AI-driven accuracy with no human intervention</p>
             </div>
 
             {/* Feature 2 */}
             <div className="max-w-xs text-center">
-                <img src="/feat1.png" alt="24/7 Support" className="rounded-full w-40 h-40 mx-auto"/>
+                <img src="/whatis_two.jpeg" alt="24/7 Support" className="rounded-full w-40 h-40 mx-auto"/>
                 <p className="mt-4 font-inter">Available 24/7 whenever you need guidance</p>
             </div>
 
             {/* Feature 3 */}
             <div className="max-w-xs text-center">
-                <img src="/feat1.png" alt="Private Readings" className="rounded-full w-40 h-40 mx-auto"/>
+                <img src="/whatis_three.jpeg" alt="Private Readings" className="rounded-full w-40 h-40 mx-auto"/>
                 <p className="mt-4 font-inter">Private, judgment-free astrology readings</p>
             </div>
         </div>

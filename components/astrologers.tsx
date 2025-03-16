@@ -4,22 +4,28 @@ import {ChevronLeft, ChevronRight} from "lucide-react";
 
 const astrologers = [
     {
-        name: "Celestia",
-        role: "The Love & Relationships Guru",
-        description: "Celestia deciphers your romantic and personal connections, guiding you toward fulfilling relationships and emotional harmony.",
-        image: "/feat1.png"
+        name: "Vedica",
+        role: "The Life Harmonizer",
+        description: "Vedika offers personalized insights on your physical and mental well-being. Using your unique birth chart, she guides you toward balanced health and harmony, tailored specifically to your needs.",
+        image: "/vedica_astro.png"
     },
     {
-        name: "Orion",
-        role: "The Career & Success Guide",
-        description: "Orion provides insight into your professional journey, helping you make informed career decisions and achieve success.",
-        image: "/feat1.png"
+        name: "Rudra",
+        role: "The Wealth Strategist",
+        description: "Rudra specializes in finance and prosperity-related predictions. With deep astrological insights, Rudra helps you understand financial trends, uncover investment opportunities, and navigate prosperity cycles based on your unique birth chart.",
+        image: "/rudra_astro.png"
     },
     {
-        name: "Luna",
-        role: "The Emotional Well-being Mentor",
-        description: "Luna offers guidance for inner peace, emotional balance, and mental clarity in life's journey.",
-        image: "/feat1.png"
+        name: "Vyom",
+        role: "The Career Navigator",
+        description: "Vyom specializes in predictions related to career growth and opportunities. With Vyom’s astrological expertise, you can find clarity on professional advancement, job transitions, and new career paths.",
+        image: "/vyom_astro.png"
+    },
+    {
+        name: "Meher",
+        role: "The Heart Alchemist",
+        description: "Meher specializes in relationships and emotional connections, providing personalized, intuitive guidance to navigate your love life with clarity and confidence.",
+        image: "/meher_astro.png"
     }
 ];
 
@@ -36,7 +42,7 @@ export default function AstrologersSection() {
 
     return (
         <section id="astrologers" className="p-12 text-white">
-            <h3 className="text-[48px] font-playfair font-regular text-center">Meet Our AI Astrologers</h3>
+            <h3 className="text-[48px] font-playfair font-regular text-center">Connect with Your Expert AI Astrologers</h3>
             <div className="mt-8 flex flex-col items-center relative max-w-4xl mx-auto py-4">
                 <motion.div
                     key={current}
