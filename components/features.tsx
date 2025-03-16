@@ -8,7 +8,7 @@ export default function Feature() {
         {/* Title and description */}
         <h2 style={{letterSpacing: '0.2px'}} className="text-[48px] font-playfair font-normal relative z-10">What is AstroNow.AI?</h2>
         <p className="mt-4 text-lg max-w-2xl mx-auto relative z-10 font-dm-sans">
-            AstroNowAl is a revolutionary AI-powered astrology platform designed to bring you accurate and
+            AstroNowAI is a revolutionary AI-powered astrology platform designed to bring you accurate and
             personalized astrological insights anytime, anywhere. Using your unique birth chart, our AI
             astrologers decode the cosmic patterns that shape your life, giving you clarity and confidence
             in your decisions.

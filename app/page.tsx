@@ -46,7 +46,7 @@ function Mission() {
         <div className="max-w-5xl flex flex-col md:flex-row items-start justify-center gap-16">
             {/* Left Side - Logo */}
             <div className="flex-shrink-0 self-start px-24">
-                <img src="/mission.png" alt="Our Mission" className="w-48 h-48 md:w-56 md:h-56"/>
+                <img src="/mission.jpeg" alt="Our Mission" className="w-80 h-80 rounded-full"/>
             </div>
 
             {/* Right Side - Mission Statement */}
