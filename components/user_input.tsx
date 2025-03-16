@@ -3,7 +3,7 @@
 import { useState, ChangeEvent, FormEvent } from "react";
 import { FiUser, FiMail } from "react-icons/fi";
 
-export default function UserInputPage() {
+export default function InputPage() {
     const [formData, setFormData] = useState({ name: "", email: "" });
     const [submitted, setSubmitted] = useState(false);
 
@@ -20,7 +20,7 @@ export default function UserInputPage() {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-500 to-purple-600 p-6">
+        <div className="min-h-screen flex items-center justify-center p-6">
             <div className="bg-white p-8 rounded-xl shadow-lg w-full max-w-md">
                 <h2 className="text-2xl font-bold text-center text-gray-700 mb-6">
                     User Input Form
