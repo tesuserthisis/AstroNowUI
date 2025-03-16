@@ -55,7 +55,7 @@ export default function AstrologersSection() {
                     <img
                         src={astrologers[current].image}
                         alt={astrologers[current].name}
-                        className="rounded-lg w-48 h-48 object-cover"
+                        className="w-48 h-48 rounded-full"
                     />
                     <div className="px-24">
                         <h4 className="text-4xl font-dm-sans font-regular">{astrologers[current].name}</h4>
