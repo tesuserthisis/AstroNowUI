@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import {signIn} from "next-auth/react";
 
 const plans = [
     {
@@ -85,7 +86,7 @@ export default function PricingPlans() {
                                 ))}
                             </ul>
                         </div>
-                        <button className="w-full bg-white text-black font-semibold rounded-xl py-2 mt-auto">
+                        <button onClick={() => signIn("google")} className="w-full bg-white text-black font-semibold rounded-xl py-2 mt-auto cursor-pointer">
                             Get started
                         </button>
                     </div>
