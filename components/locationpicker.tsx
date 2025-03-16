@@ -7,7 +7,7 @@ interface MapboxFeature extends Feature {
     center: [number, number]; // [lng, lat]
 }
 
-const MAPBOX_API_KEY = process.env.REACT_APP_MAPBOX_API_KEY || ""; // this is not working if key not present here
+const MAPBOX_API_KEY = process.env.NEXT_PUBLIC_MAPBOX_API_KEY || "";
 
 const LocationPicker: React.FC = () => {
     const [query, setQuery] = useState<string>("");
