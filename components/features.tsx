@@ -32,10 +32,7 @@ export default function Feature() {
                 What is AstroNow.AI?
             </h2>
             <p className="mt-4 text-lg max-w-2xl mx-auto relative z-10 font-dm-sans">
-                AstroNowAI is a revolutionary AI-powered astrology platform designed to bring you accurate and
-                personalized astrological insights anytime, anywhere. Using your unique birth chart, our AI
-                astrologers decode the cosmic patterns that shape your life, giving you clarity and confidence
-                in your decisions.
+                Unlock the wisdom of the stars with AI-powered astrology, available 24/7 at your fingertips! Our four expert virtual astrologers decode your health, career, finance, and love life using your unique birth chart—bringing you personalized, accurate insights in a private and judgment-free space. No fear-mongering, no human intervention—just pure cosmic guidance, anytime you need it! ✨
             </p>
 
             {/* Features grid */}
