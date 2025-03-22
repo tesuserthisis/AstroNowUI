@@ -2,6 +2,7 @@
 
 import { useState, ChangeEvent, FormEvent } from "react";
 import { FiUser, FiMail } from "react-icons/fi";
+import LocationPicker from "@/components/locationpicker";
 
 export default function InputPage() {
     const [formData, setFormData] = useState({ name: "", email: "" });
@@ -55,6 +56,8 @@ export default function InputPage() {
                                 required
                             />
                         </div>
+
+                        <LocationPicker/>
 
                         {/* Submit Button */}
                         <button
