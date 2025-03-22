@@ -62,7 +62,7 @@ function Mission() {
 
 function Footer() {
     return (
-        <footer className="bg-black text-white py-6 px-4">
+        <footer className="bg-black text-white py-4 px-4">
             <div className=" mx-auto flex flex-col md:flex-row justify-between items-start">
                 {/* Left Side - Logo and Social Media */}
                 <div className="flex flex-col items-center md:items-start">
