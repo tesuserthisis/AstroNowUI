@@ -13,6 +13,7 @@ import axios from "axios";
     ],
     callbacks: {
         async signIn({ user }: { user: User }) {
+
             console.log("User signed in:", user);
             try {
                 await axios.post("https://astronowai.fly.dev/user-info/setup", {
@@ -25,7 +26,7 @@ import axios from "axios";
             return true;
         },
         async redirect({ url, baseUrl }: { url: string; baseUrl: string }) {
-            return url.includes("signout") ? baseUrl : `${baseUrl}`;
+            return url.includes("signout") ? baseUrl : `${baseUrl}/user-detail`;
         },
         async jwt({ token, user }: { token: JWT; user?: User }) {
             if (user) {
