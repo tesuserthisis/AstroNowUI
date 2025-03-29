@@ -6,6 +6,14 @@ import { motion } from "framer-motion";
 import LocationPicker from "@/components/locationpicker";
 
 export default function InputPage() {
+    type FormErrors = {
+        name: string;
+        dob: string;
+        tob: string;
+        gender: string;
+        pob: string;
+    };
+
     const [formData, setFormData] = useState({ name: "", dob: "", tob: "", gender: "", pob: "" });
     const [errors, setErrors] = useState({ name: "", dob: "", tob: "", gender: "", pob: "" });
 
@@ -82,9 +90,10 @@ export default function InputPage() {
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        let newErrors: any = {};
-        Object.keys(formData).forEach((key) => {
-            newErrors[key] = validateField(key, formData[key as keyof typeof formData]);
+        const newErrors: FormErrors = { name: "", dob: "", tob: "", gender: "", pob: "" };
+
+        (Object.keys(formData) as Array<keyof FormErrors>).forEach((key) => {
+            newErrors[key] = validateField(key, formData[key]);
         });
 
         setErrors(newErrors);
