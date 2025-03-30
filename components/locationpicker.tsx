@@ -48,7 +48,7 @@ const LocationPicker: React.FC<{ onChange?: (location: string) => void }> = ({ o
     return (
         <div className="relative">
             <div className="relative">
-                <FiMapPin className="absolute left-4 top-4 text-white/60" />
+                <FiMapPin className="absolute left-4 top-1/2 transform -translate-y-1/2 text-white/60" />
                 <input
                     type="text"
                     value={query}

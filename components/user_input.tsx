@@ -28,7 +28,6 @@ export default function InputPage() {
     const formatTOB = (value: string) => {
         value = value.replace(/\D/g, ""); // Remove non-numeric characters
         if (value.length >= 2) value = value.substring(0, 2) + ":" + value.substring(2);
-        if (value.length >= 5) value = value.substring(0, 5) + ":" + value.substring(5, 7);
         return value;
     };
 
@@ -53,11 +52,11 @@ export default function InputPage() {
                 break;
 
             case "tob":
-                if (!/^\d{2}:\d{2}:\d{2}$/.test(value)) {
-                    error = "Invalid time format (HH:MM:SS)";
+                if (!/^\d{2}:\d{2}$/.test(value)) {
+                    error = "Invalid time format (HH:MM)";
                 } else {
-                    const [hours, minutes, seconds] = value.split(":").map(Number);
-                    if (hours > 23 || minutes > 59 || seconds > 59) {
+                    const [hours, minutes] = value.split(":").map(Number);
+                    if (hours > 23 || minutes > 59) {
                         error = "Invalid time";
                     }
                 }
@@ -115,7 +114,7 @@ export default function InputPage() {
                     className="bg-white/10 backdrop-blur-md p-8 rounded-2xl shadow-lg w-full max-w-lg border border-white/20"
                 >
                     <h2 className="text-3xl font-bold text-center text-white mb-6">
-                        User Input Form
+                        Enter Your Details
                     </h2>
 
                     <motion.form
@@ -127,7 +126,7 @@ export default function InputPage() {
                     >
                         {/* Full Name */}
                         <div className="relative">
-                            <FiUser className="absolute left-4 top-4 text-white/60"/>
+                            <FiUser className="absolute left-4 top-1/2 transform -translate-y-1/2 text-white/60"/>
                             <input
                                 type="text"
                                 name="name"
@@ -141,7 +140,7 @@ export default function InputPage() {
 
                         {/* Date of Birth (DOB) */}
                         <div className="relative">
-                            <FiCalendar className="absolute left-4 top-4 text-white/60"/>
+                            <FiCalendar className="absolute left-4 top-1/2 transform -translate-y-1/2 text-white/60"/>
                             <input
                                 type="text"
                                 name="dob"
@@ -156,14 +155,14 @@ export default function InputPage() {
 
                         {/* Time of Birth (TOB) */}
                         <div className="relative">
-                            <FiClock className="absolute left-4 top-4 text-white/60"/>
+                            <FiClock className="absolute left-4 top-1/2 transform -translate-y-1/2 text-white/60"/>
                             <input
                                 type="text"
                                 name="tob"
                                 value={formData.tob}
                                 onChange={handleChange}
-                                placeholder="HH:MM:SS (24hr)"
-                                maxLength={8}
+                                placeholder="HH:MM (24hr)"
+                                maxLength={5}
                                 className="w-full p-4 pl-12 bg-white/10 text-white border border-white/30 rounded-xl focus:ring-2 focus:ring-blue-400 outline-none backdrop-blur-md placeholder-white/50"
                             />
                             {errors.tob && <p className="text-red-400 text-sm mt-1">{errors.tob}</p>}
