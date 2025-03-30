@@ -1,9 +1,10 @@
 "use client";
 
-import { useState, ChangeEvent, FormEvent } from "react";
-import { FiUser, FiCalendar, FiClock } from "react-icons/fi";
-import { motion } from "framer-motion";
+import {useState, ChangeEvent, FormEvent} from "react";
+import {FiUser, FiCalendar, FiClock} from "react-icons/fi";
+import {motion} from "framer-motion";
 import LocationPicker from "@/components/locationpicker";
+import ProtectedRoute from "@/components/ProtectedRoute";
 
 export default function InputPage() {
     type FormErrors = {
@@ -14,8 +15,8 @@ export default function InputPage() {
         pob: string;
     };
 
-    const [formData, setFormData] = useState({ name: "", dob: "", tob: "", gender: "", pob: "" });
-    const [errors, setErrors] = useState({ name: "", dob: "", tob: "", gender: "", pob: "" });
+    const [formData, setFormData] = useState({name: "", dob: "", tob: "", gender: "", pob: ""});
+    const [errors, setErrors] = useState({name: "", dob: "", tob: "", gender: "", pob: ""});
 
     const formatDOB = (value: string) => {
         value = value.replace(/\D/g, ""); // Remove non-numeric characters
@@ -75,22 +76,22 @@ export default function InputPage() {
     };
 
     const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-        const { name, value } = e.target;
+        const {name, value} = e.target;
         let formattedValue = value;
 
         if (name === "dob") formattedValue = formatDOB(value);
         if (name === "tob") formattedValue = formatTOB(value);
 
-        setFormData({ ...formData, [name]: formattedValue });
+        setFormData({...formData, [name]: formattedValue});
 
         // Validate live while typing
-        setErrors({ ...errors, [name]: validateField(name, formattedValue) });
+        setErrors({...errors, [name]: validateField(name, formattedValue)});
     };
 
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        const newErrors: FormErrors = { name: "", dob: "", tob: "", gender: "", pob: "" };
+        const newErrors: FormErrors = {name: "", dob: "", tob: "", gender: "", pob: ""};
 
         (Object.keys(formData) as Array<keyof FormErrors>).forEach((key) => {
             newErrors[key] = validateField(key, formData[key]);
@@ -105,97 +106,98 @@ export default function InputPage() {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center p-6">
-            <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.4 }}
-                className="bg-white/10 backdrop-blur-md p-8 rounded-2xl shadow-lg w-full max-w-lg border border-white/20"
-            >
-                <h2 className="text-3xl font-bold text-center text-white mb-6">
-                    User Input Form
-                </h2>
-
-                <motion.form
-                    onSubmit={handleSubmit}
-                    className="space-y-6"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.2 }}
+        <ProtectedRoute>
+            <div className="min-h-screen flex items-center justify-center p-6">
+                <motion.div
+                    initial={{opacity: 0, scale: 0.9}}
+                    animate={{opacity: 1, scale: 1}}
+                    transition={{duration: 0.4}}
+                    className="bg-white/10 backdrop-blur-md p-8 rounded-2xl shadow-lg w-full max-w-lg border border-white/20"
                 >
-                    {/* Full Name */}
-                    <div className="relative">
-                        <FiUser className="absolute left-4 top-4 text-white/60" />
-                        <input
-                            type="text"
-                            name="name"
-                            value={formData.name}
-                            onChange={handleChange}
-                            placeholder="Full Name"
-                            className="w-full p-4 pl-12 bg-white/10 text-white border border-white/30 rounded-xl focus:ring-2 focus:ring-blue-400 outline-none backdrop-blur-md placeholder-white/50"
-                        />
-                        {errors.name && <p className="text-red-400 text-sm mt-1">{errors.name}</p>}
-                    </div>
+                    <h2 className="text-3xl font-bold text-center text-white mb-6">
+                        User Input Form
+                    </h2>
 
-                    {/* Date of Birth (DOB) */}
-                    <div className="relative">
-                        <FiCalendar className="absolute left-4 top-4 text-white/60" />
-                        <input
-                            type="text"
-                            name="dob"
-                            value={formData.dob}
-                            onChange={handleChange}
-                            placeholder="DD/MM/YYYY"
-                            maxLength={10}
-                            className="w-full p-4 pl-12 bg-white/10 text-white border border-white/30 rounded-xl focus:ring-2 focus:ring-blue-400 outline-none backdrop-blur-md placeholder-white/50"
-                        />
-                        {errors.dob && <p className="text-red-400 text-sm mt-1">{errors.dob}</p>}
-                    </div>
-
-                    {/* Time of Birth (TOB) */}
-                    <div className="relative">
-                        <FiClock className="absolute left-4 top-4 text-white/60" />
-                        <input
-                            type="text"
-                            name="tob"
-                            value={formData.tob}
-                            onChange={handleChange}
-                            placeholder="HH:MM:SS (24hr)"
-                            maxLength={8}
-                            className="w-full p-4 pl-12 bg-white/10 text-white border border-white/30 rounded-xl focus:ring-2 focus:ring-blue-400 outline-none backdrop-blur-md placeholder-white/50"
-                        />
-                        {errors.tob && <p className="text-red-400 text-sm mt-1">{errors.tob}</p>}
-                    </div>
-
-                    {/* Gender Selection */}
-                    <div className="relative">
-                        <select
-                            name="gender"
-                            value={formData.gender}
-                            onChange={handleChange}
-                            className="w-full p-4 bg-white/10 text-white border border-white/30 rounded-xl focus:ring-2 focus:ring-blue-400 outline-none backdrop-blur-md"
-                        >
-                            <option value="" disabled>Select Gender</option>
-                            <option value="male">Male</option>
-                            <option value="female">Female</option>
-                            <option value="other">Other</option>
-                        </select>
-                        {errors.gender && <p className="text-red-400 text-sm mt-1">{errors.gender}</p>}
-                    </div>
-
-                    {/* Place of Birth (POB) */}
-                    <LocationPicker />
-                    {errors.pob && <p className="text-red-400 text-sm mt-1">{errors.pob}</p>}
-
-                    {/* Submit Button */}
-                    <button
-                        type="submit"
-                        className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 rounded-lg transition duration-300"
+                    <motion.form
+                        onSubmit={handleSubmit}
+                        className="space-y-6"
+                        initial={{opacity: 0}}
+                        animate={{opacity: 1}}
+                        transition={{delay: 0.2}}
                     >
-                        Submit
-                    </button>
-                </motion.form>
-            </motion.div>
-        </div>
+                        {/* Full Name */}
+                        <div className="relative">
+                            <FiUser className="absolute left-4 top-4 text-white/60"/>
+                            <input
+                                type="text"
+                                name="name"
+                                value={formData.name}
+                                onChange={handleChange}
+                                placeholder="Full Name"
+                                className="w-full p-4 pl-12 bg-white/10 text-white border border-white/30 rounded-xl focus:ring-2 focus:ring-blue-400 outline-none backdrop-blur-md placeholder-white/50"
+                            />
+                            {errors.name && <p className="text-red-400 text-sm mt-1">{errors.name}</p>}
+                        </div>
+
+                        {/* Date of Birth (DOB) */}
+                        <div className="relative">
+                            <FiCalendar className="absolute left-4 top-4 text-white/60"/>
+                            <input
+                                type="text"
+                                name="dob"
+                                value={formData.dob}
+                                onChange={handleChange}
+                                placeholder="DD/MM/YYYY"
+                                maxLength={10}
+                                className="w-full p-4 pl-12 bg-white/10 text-white border border-white/30 rounded-xl focus:ring-2 focus:ring-blue-400 outline-none backdrop-blur-md placeholder-white/50"
+                            />
+                            {errors.dob && <p className="text-red-400 text-sm mt-1">{errors.dob}</p>}
+                        </div>
+
+                        {/* Time of Birth (TOB) */}
+                        <div className="relative">
+                            <FiClock className="absolute left-4 top-4 text-white/60"/>
+                            <input
+                                type="text"
+                                name="tob"
+                                value={formData.tob}
+                                onChange={handleChange}
+                                placeholder="HH:MM:SS (24hr)"
+                                maxLength={8}
+                                className="w-full p-4 pl-12 bg-white/10 text-white border border-white/30 rounded-xl focus:ring-2 focus:ring-blue-400 outline-none backdrop-blur-md placeholder-white/50"
+                            />
+                            {errors.tob && <p className="text-red-400 text-sm mt-1">{errors.tob}</p>}
+                        </div>
+
+                        {/* Gender Selection */}
+                        <div className="relative">
+                            <select
+                                name="gender"
+                                value={formData.gender}
+                                onChange={handleChange}
+                                className="w-full p-4 bg-white/10 text-white border border-white/30 rounded-xl focus:ring-2 focus:ring-blue-400 outline-none backdrop-blur-md"
+                            >
+                                <option value="" disabled>Select Gender</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                            </select>
+                            {errors.gender && <p className="text-red-400 text-sm mt-1">{errors.gender}</p>}
+                        </div>
+
+                        {/* Place of Birth (POB) */}
+                        <LocationPicker/>
+                        {errors.pob && <p className="text-red-400 text-sm mt-1">{errors.pob}</p>}
+
+                        {/* Submit Button */}
+                        <button
+                            type="submit"
+                            className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 rounded-lg transition duration-300"
+                        >
+                            Submit
+                        </button>
+                    </motion.form>
+                </motion.div>
+            </div>
+        </ProtectedRoute>
     );
 }
