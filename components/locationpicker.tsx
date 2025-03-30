@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import axios from "axios";
 import { Feature } from "geojson";
 import { FiMapPin } from "react-icons/fi";
@@ -8,22 +8,34 @@ interface MapboxFeature extends Feature {
     center: [number, number]; // [lng, lat]
 }
 
-const MAPBOX_API_KEY = process.env.NEXT_PUBLIC_MAPBOX_API_KEY || "";
-
-const LocationPicker: React.FC<{ onChange?: (location: string) => void }> = ({ onChange = () => {} }) => {
-    const [query, setQuery] = useState<string>("");
+const LocationPicker: React.FC<{
+    value?: string;
+    onChange?: (location: string) => void
+}> = ({
+          value = "",
+          onChange = () => {}
+      }) => {
+    const [query, setQuery] = useState<string>(value || "");
     const [suggestions, setSuggestions] = useState<MapboxFeature[]>([]);
     const [coordinates, setCoordinates] = useState<{ lat: number; lng: number } | null>(null);
+    const MAPBOX_API_KEY = process.env.NEXT_PUBLIC_MAPBOX_API_KEY || "";
+
+    // Update local state when value prop changes
+    useEffect(() => {
+        if (value !== query) {
+            setQuery(value);
+        }
+    }, [value]);
 
     const handleSearch = async (e: React.ChangeEvent<HTMLInputElement>) => {
-        const value = e.target.value;
-        setQuery(value);
-        onChange(value); // Safe now, since onChange has a default value
+        const newValue = e.target.value;
+        setQuery(newValue);
+        onChange(newValue); // Update parent form state
 
-        if (value.length > 2) {
+        if (newValue.length > 2) {
             try {
                 const response = await axios.get(
-                    `https://api.mapbox.com/geocoding/v5/mapbox.places/${value}.json?access_token=${MAPBOX_API_KEY}`
+                    `https://api.mapbox.com/geocoding/v5/mapbox.places/${newValue}.json?access_token=${MAPBOX_API_KEY}`
                 );
                 setSuggestions(response.data.features as MapboxFeature[]);
             } catch (error) {
@@ -40,7 +52,7 @@ const LocationPicker: React.FC<{ onChange?: (location: string) => void }> = ({ o
         const lat = place.center[1]; // Latitude
         const lng = place.center[0]; // Longitude
         setQuery(place.place_name);
-        onChange(place.place_name);
+        onChange(place.place_name); // Update parent form state
         setCoordinates({ lat, lng });
         setSuggestions([]);
     };
@@ -72,7 +84,7 @@ const LocationPicker: React.FC<{ onChange?: (location: string) => void }> = ({ o
                 </ul>
             )}
 
-            {coordinates && (
+            {coordinates && query.trim() !== "" && (
                 <div className="mt-3 p-4 bg-white/10 border border-white/30 rounded-xl text-white backdrop-blur-md">
                     <p className="text-lg font-medium">📍 {query}</p>
                     <p className="text-sm text-white/70">

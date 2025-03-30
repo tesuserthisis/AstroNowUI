@@ -183,8 +183,13 @@ export default function InputPage() {
                             {errors.gender && <p className="text-red-400 text-sm mt-1">{errors.gender}</p>}
                         </div>
 
-                        {/* Place of Birth (POB) */}
-                        <LocationPicker/>
+                        <LocationPicker
+                            value={formData.pob}
+                            onChange={(location) => {
+                                setFormData({...formData, pob: location});
+                                setErrors({...errors, pob: validateField('pob', location)});
+                            }}
+                        />
                         {errors.pob && <p className="text-red-400 text-sm mt-1">{errors.pob}</p>}
 
                         {/* Submit Button */}
