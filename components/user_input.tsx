@@ -1,13 +1,16 @@
 "use client";
 
 import {useState, ChangeEvent, FormEvent} from "react";
-import {FiUser, FiCalendar, FiClock} from "react-icons/fi";
+import {FiUser, FiCalendar, FiClock, FiSend} from "react-icons/fi";
 import {motion} from "framer-motion";
 import LocationPicker from "@/components/locationpicker";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import {useSession} from "next-auth/react";
+import {useRouter} from "next/navigation";
 
 export default function InputPage() {
+    const router = useRouter();
+
     type FormErrors = {
         name: string;
         dob: string;
@@ -20,7 +23,7 @@ export default function InputPage() {
     const [errors, setErrors] = useState({name: "", dob: "", tob: "", gender: "", pob: ""});
     const [coordinates, setCoordinates] = useState<{ lat: number; lng: number } | null>(null);
     const {data: session} = useSession();
-
+    const [isLoading, setIsLoading] = useState(false);
 
     const formatDOB = (value: string) => {
         value = value.replace(/\D/g, ""); // Remove non-numeric characters
@@ -93,6 +96,7 @@ export default function InputPage() {
 
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        setIsLoading(true); // start loading
 
         const newErrors: FormErrors = {name: "", dob: "", tob: "", gender: "", pob: ""};
 
@@ -102,17 +106,23 @@ export default function InputPage() {
 
         setErrors(newErrors);
 
-        if (Object.values(newErrors).some((error) => error)) return; // Stop if errors exist
+        if (Object.values(newErrors).some((error) => error)) {
+            setIsLoading(false);
+            return;
+        }
 
         const userEmail = session?.user?.email;
 
         if (!userEmail) {
             console.log("Unable to get user id")
             alert("Unable to get email id")
+            setIsLoading(false);
+            return
         }
 
         if (!coordinates) {
             alert("Please select a location");
+            setIsLoading(false);
             return;
         }
 
@@ -144,10 +154,12 @@ export default function InputPage() {
 
             if (!res.ok) throw new Error("Failed to submit user data");
 
-            alert("User data submitted successfully!");
+            router.push("/")
         } catch (error) {
             console.error(error);
             alert("There was an error submitting your data.");
+        } finally {
+            setIsLoading(false); // always reset
         }
 
     };
@@ -244,9 +256,41 @@ export default function InputPage() {
                         {/* Submit Button */}
                         <button
                             type="submit"
-                            className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 rounded-lg transition duration-300"
+                            disabled={isLoading}
+                            className={`cursor-pointer w-full flex items-center justify-center gap-2 ${
+                                isLoading ? "bg-gray-400 cursor-not-allowed" : "bg-blue-500 hover:bg-blue-600"
+                            } text-white font-semibold py-3 rounded-lg transition duration-300`}
                         >
-                            Submit
+                            {isLoading ? (
+                                <>
+                                    <svg
+                                        className="animate-spin h-5 w-5 text-white"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <circle
+                                            className="opacity-25"
+                                            cx="12"
+                                            cy="12"
+                                            r="10"
+                                            stroke="currentColor"
+                                            strokeWidth="4"
+                                        ></circle>
+                                        <path
+                                            className="opacity-75"
+                                            fill="currentColor"
+                                            d="M4 12a8 8 0 018-8v8z"
+                                        ></path>
+                                    </svg>
+                                    <span>Submitting...</span>
+                                </>
+                            ) : (
+                                <>
+                                    <span>Submit</span>
+                                    <FiSend />
+                                </>
+                            )}
                         </button>
                     </motion.form>
                 </motion.div>
