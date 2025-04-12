@@ -18,6 +18,7 @@ export default function InputPage() {
 
     const [formData, setFormData] = useState({name: "", dob: "", tob: "", gender: "", pob: ""});
     const [errors, setErrors] = useState({name: "", dob: "", tob: "", gender: "", pob: ""});
+    const [coordinates, setCoordinates] = useState<{ lat: number; lng: number } | null>(null);
     const {data: session} = useSession();
 
 
@@ -107,15 +108,16 @@ export default function InputPage() {
 
         if (!userEmail) {
             console.log("Unable to get user id")
+            alert("Unable to get email id")
         }
 
         const payload = {
             ...formData,
             email: userEmail,
+            coordinates
         };
 
         console.log(payload);
-        alert("Form submitted successfully! " + payload);
     };
 
     return (
@@ -203,6 +205,7 @@ export default function InputPage() {
                                 setFormData({...formData, pob: location});
                                 setErrors({...errors, pob: validateField('pob', location)});
                             }}
+                            onCoordinatesChange={(coords) => setCoordinates(coords)}
                         />
                         {errors.pob && <p className="text-red-400 text-sm mt-1">{errors.pob}</p>}
 

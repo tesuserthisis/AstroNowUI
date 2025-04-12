@@ -11,9 +11,11 @@ interface MapboxFeature extends Feature {
 const LocationPicker: React.FC<{
     value?: string;
     onChange?: (location: string) => void
+    onCoordinatesChange?: (coords: { lat: number; lng: number }) => void;
 }> = ({
           value = "",
-          onChange = () => {}
+          onChange = () => {},
+          onCoordinatesChange = () => {},
       }) => {
     const [query, setQuery] = useState<string>(value || "");
     const [suggestions, setSuggestions] = useState<MapboxFeature[]>([]);
@@ -55,6 +57,7 @@ const LocationPicker: React.FC<{
         onChange(place.place_name); // Update parent form state
         setCoordinates({ lat, lng });
         setSuggestions([]);
+        onCoordinatesChange({ lat, lng });
     };
 
     return (
