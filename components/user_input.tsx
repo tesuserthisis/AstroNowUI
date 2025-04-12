@@ -111,13 +111,45 @@ export default function InputPage() {
             alert("Unable to get email id")
         }
 
-        const payload = {
-            ...formData,
-            email: userEmail,
-            coordinates
+        if (!coordinates) {
+            alert("Please select a location");
+            return;
+        }
+
+        const formatDateForAPI = (dob: string) => {
+            const [day, month, year] = dob.split("/");
+            return `${day}-${month}-${year}`;
         };
 
-        console.log(payload);
+        const payload = {
+            user_name: formData.name,
+            date_of_birth: formatDateForAPI(formData.dob),
+            time_of_birth: `${formData.tob}:00`,
+            gender: formData.gender,
+            place_of_birth: formData.pob,
+            lat: coordinates.lat,
+            long: coordinates.lng,
+            email: 'mohakpuri1712@gmail.com',
+        };
+
+        try {
+            console.log(JSON.stringify(payload));
+            const res = await fetch("https://astronowai.fly.dev/user-info", {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(payload),
+            });
+
+            if (!res.ok) throw new Error("Failed to submit user data");
+
+            alert("User data submitted successfully!");
+        } catch (error) {
+            console.error(error);
+            alert("There was an error submitting your data.");
+        }
+
     };
 
     return (
