@@ -71,14 +71,15 @@ const LocationPicker: React.FC<{
             </div>
 
             {suggestions.length > 0 && (
-                <ul className="absolute left-0 mt-2 w-full bg-white/10 backdrop-blur-md border border-white/30 rounded-lg shadow-lg z-10 overflow-hidden">
+                <ul className="absolute left-0 mt-2 w-full bg-black backdrop-blur-sm border border-white/20 rounded-xl shadow-xl z-10 max-h-60 overflow-y-auto">
                     {suggestions.map((place, index) => (
                         <li
                             key={index}
                             onClick={() => handleSelect(place)}
-                            className="p-3 text-white cursor-pointer hover:bg-white/20 transition"
+                            className="flex items-center gap-3 p-4 text-white/90 cursor-pointer hover:bg-white/10 transition duration-200"
                         >
-                            {place.place_name}
+                            <FiMapPin className="text-blue-400" />
+                            <span className="text-sm">{place.place_name}</span>
                         </li>
                     ))}
                 </ul>

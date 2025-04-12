@@ -5,6 +5,7 @@ import {FiUser, FiCalendar, FiClock} from "react-icons/fi";
 import {motion} from "framer-motion";
 import LocationPicker from "@/components/locationpicker";
 import ProtectedRoute from "@/components/ProtectedRoute";
+import {useSession} from "next-auth/react";
 
 export default function InputPage() {
     type FormErrors = {
@@ -17,6 +18,8 @@ export default function InputPage() {
 
     const [formData, setFormData] = useState({name: "", dob: "", tob: "", gender: "", pob: ""});
     const [errors, setErrors] = useState({name: "", dob: "", tob: "", gender: "", pob: ""});
+    const {data: session} = useSession();
+
 
     const formatDOB = (value: string) => {
         value = value.replace(/\D/g, ""); // Remove non-numeric characters
@@ -100,8 +103,19 @@ export default function InputPage() {
 
         if (Object.values(newErrors).some((error) => error)) return; // Stop if errors exist
 
-        console.log("User Input:", formData);
-        alert("Form submitted successfully!");
+        const userEmail = session?.user?.email;
+
+        if (!userEmail) {
+            console.log("Unable to get user id")
+        }
+
+        const payload = {
+            ...formData,
+            email: userEmail,
+        };
+
+        console.log(payload);
+        alert("Form submitted successfully! " + payload);
     };
 
     return (
