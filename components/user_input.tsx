@@ -129,7 +129,7 @@ export default function InputPage() {
             place_of_birth: formData.pob,
             lat: coordinates.lat,
             long: coordinates.lng,
-            email: 'mohakpuri1712@gmail.com',
+            email: session?.user?.email,
         };
 
         try {
