@@ -21,7 +21,7 @@ export default function Redirect() {
                 session.user.mappedUser.longitude;
 
             if (!profileComplete) {
-                router.replace("/user-details");
+                router.replace("/user-detail");
             } else {
                 router.replace("/");
             }
