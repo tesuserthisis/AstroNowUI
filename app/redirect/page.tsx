@@ -1,11 +1,11 @@
 "use client";
 
-import {useSession} from "next-auth/react";
-import {useRouter} from "next/router";
-import {useEffect} from "react";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export default function Redirect() {
-    const {data: session, status} = useSession();
+    const { data: session, status } = useSession();
     const router = useRouter();
 
     useEffect(() => {
@@ -28,4 +28,5 @@ export default function Redirect() {
         }
     }, [session, status, router]);
 
+    return null; // Added a return statement as components should return something
 }
