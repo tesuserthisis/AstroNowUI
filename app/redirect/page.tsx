@@ -1,4 +1,5 @@
-// In your user-detail.tsx or similar page
+"use client";
+
 import {useSession} from "next-auth/react";
 import {useRouter} from "next/router";
 import {useEffect} from "react";
