@@ -4,7 +4,6 @@ import {useState, ChangeEvent, FormEvent} from "react";
 import {FiUser, FiCalendar, FiClock, FiSend} from "react-icons/fi";
 import {motion} from "framer-motion";
 import LocationPicker from "@/components/locationpicker";
-import ProtectedRoute from "@/components/ProtectedRoute";
 import {useSession} from "next-auth/react";
 import {useRouter} from "next/navigation";
 
