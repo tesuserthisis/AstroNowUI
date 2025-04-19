@@ -1,12 +1,12 @@
 "use client";
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation"; // <-- App Router (Next.js 13+)
+import {useState, useEffect} from "react";
+import {useRouter} from "next/navigation"; // <-- App Router (Next.js 13+)
 
 const astrologers = [
-    { name: "Vedika", role: "The Life Harmonizer", image: "/vedica_astro.png" },
-    { name: "Rudra", role: "The Wealth Strategist", image: "/rudra_astro.png" },
-    { name: "Vyom", role: "The Career Navigator", image: "/vyom_astro.png" },
-    { name: "Meher", role: "The Heart Alchemist", image: "/meher_astro.png" },
+    {name: "Vedika", role: "The Life Harmonizer", image: "/vedica_astro.png"},
+    {name: "Rudra", role: "The Wealth Strategist", image: "/rudra_astro.png"},
+    {name: "Vyom", role: "The Career Navigator", image: "/vyom_astro.png"},
+    {name: "Meher", role: "The Heart Alchemist", image: "/meher_astro.png"},
 ];
 
 export default function AstrologerSelector() {
@@ -58,14 +58,20 @@ export default function AstrologerSelector() {
                 router.push(
                     `/chat?chat_type=${data.chat.chat_type}&chat_id=${data.chat.id}&user_id=${data.chat.user_id}`
                 );
-            } catch (error: any) {
+            } catch (error: unknown) {
                 clearInterval(progressInterval);
                 setProgress(100);
                 setLoading(false);
-                setApiError(error.message);
-                console.error("Error initializing chat:", error);
+
+                if (error instanceof Error) {
+                    setApiError(error.message);
+                    console.error("Error initializing chat:", error);
+                } else {
+                    setApiError("An unexpected error occurred.");
+                    console.error("Unknown error initializing chat:", error);
+                }
             }
-        };
+        }
 
         initializeChat();
     }, [selected]);
@@ -101,7 +107,8 @@ export default function AstrologerSelector() {
             )}
 
             {selectedAstro && (
-                <div className="flex flex-col items-center justify-center animate-fade-in transition-all duration-500 mt-8">
+                <div
+                    className="flex flex-col items-center justify-center animate-fade-in transition-all duration-500 mt-8">
                     <div
                         className={`rounded-3xl shadow-2xl p-8 bg-white border-4 border-purple-600 flex flex-col items-center text-center max-w-xs transition-all duration-500 transform ${
                             selected ? "scale-110 translate-y-0" : "scale-100"
@@ -122,7 +129,7 @@ export default function AstrologerSelector() {
                             <div className="w-full bg-purple-200 rounded-full h-3 overflow-hidden">
                                 <div
                                     className="bg-purple-600 h-3 transition-all duration-300"
-                                    style={{ width: `${progress}%` }}
+                                    style={{width: `${progress}%`}}
                                 />
                             </div>
                         </div>
