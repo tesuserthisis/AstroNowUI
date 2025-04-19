@@ -1,7 +1,6 @@
-import NextAuth, {NextAuthOptions} from "next-auth";
+import NextAuth, {NextAuthOptions, Session, User} from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import {JWT} from "next-auth/jwt";
-import {Session, User} from "next-auth";
 import axios from "axios";
 
 interface MappedUser {

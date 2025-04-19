@@ -1,11 +1,11 @@
 "use client";
 
-import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import {useSession} from "next-auth/react";
+import {useRouter} from "next/navigation";
+import {useEffect} from "react";
 
 export default function Redirect() {
-    const { data: session, status } = useSession();
+    const {data: session, status} = useSession();
     const router = useRouter();
 
     useEffect(() => {
@@ -23,7 +23,7 @@ export default function Redirect() {
             if (!profileComplete) {
                 router.replace("/user-detail");
             } else {
-                router.replace("/");
+                router.replace("/astro-agents");
             }
         }
     }, [session, status, router]);

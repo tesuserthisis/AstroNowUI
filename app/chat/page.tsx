@@ -1,7 +1,7 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
-import { Suspense } from "react";
+import {useSearchParams} from "next/navigation";
+import {Suspense} from "react";
 
 function ChatPageContent() {
     const params = useSearchParams();
@@ -18,7 +18,7 @@ function ChatPageContent() {
 export default function ChatPage() {
     return (
         <Suspense fallback={<div className="text-white">Loading chat...</div>}>
-            <ChatPageContent />
+            <ChatPageContent/>
         </Suspense>
     );
 }

@@ -2,7 +2,7 @@
 import React from "react";
 import Head from "next/head";
 import StarsBackground from "../components/StarsBackground";
-import { FaInstagram, FaXTwitter } from "react-icons/fa6";
+import {FaInstagram, FaXTwitter} from "react-icons/fa6";
 import PricingPlansWrapper from "@/components/pricing";
 import AstrologersSection from "@/components/astrologers";
 import RecentBlogPosts from "@/components/blogs";
@@ -35,8 +35,11 @@ function Hero() {
             AstroNow.AI: AI-Powered Cosmic Clarity
         </h2>
         <p style={{letterSpacing: '0.2px'}} className="mt-4 text-[16px] max-w-5xl text-white font-poppins font-medium">
-            AstroNowAI delivers 24/7 AI-powered astrology, offering personalized insights into your health, career, finance, and relationships through your unique birth chart.
-            With four expert virtual astrologers, we provide accurate, confidential guidance in a private, judgment-free space—no fear-mongering or human intervention, just pure cosmic wisdom whenever you need it. Start your cosmic journey today and uncover your personalized path!
+            AstroNowAI delivers 24/7 AI-powered astrology, offering personalized insights into your health, career,
+            finance, and relationships through your unique birth chart.
+            With four expert virtual astrologers, we provide accurate, confidential guidance in a private, judgment-free
+            space—no fear-mongering or human intervention, just pure cosmic wisdom whenever you need it. Start your
+            cosmic journey today and uncover your personalized path!
         </p>
     </header>;
 }
@@ -53,7 +56,11 @@ function Mission() {
             <div className="md:w-3/5">
                 <h2 style={{letterSpacing: '0.2px'}} className="text-[48px] font-playfair font-regular">Our Mission</h2>
                 <p className="mt-4 text-lg font-inter font-medium">
-                    To bridge the gap between cosmic wisdom and cutting-edge AI, offering personalized astrological insights that empower you to navigate health, career, finance, and relationships with clarity and confidence. We are committed to creating a private, judgment-free sanctuary where you can explore your destiny, ask any question, and receive accurate, uplifting guidance—anytime, anywhere. No fear, no limits—just pure, AI-powered astrology, unlocking the universe’s secrets just for you.
+                    To bridge the gap between cosmic wisdom and cutting-edge AI, offering personalized astrological
+                    insights that empower you to navigate health, career, finance, and relationships with clarity and
+                    confidence. We are committed to creating a private, judgment-free sanctuary where you can explore
+                    your destiny, ask any question, and receive accurate, uplifting guidance—anytime, anywhere. No fear,
+                    no limits—just pure, AI-powered astrology, unlocking the universe’s secrets just for you.
                 </p>
             </div>
         </div>
@@ -66,13 +73,13 @@ function Footer() {
             <div className=" mx-auto flex flex-col md:flex-row justify-between items-start">
                 {/* Left Side - Logo and Social Media */}
                 <div className="flex flex-col items-center md:items-start">
-                    <img src="/logo.svg" alt="AstroNow.AI" />
+                    <img src="/logo.svg" alt="AstroNow.AI"/>
                     <div className="flex gap-4 mx-10">
                         <a href="#" className="text-xl hover:text-gray-400">
-                            <FaInstagram />
+                            <FaInstagram/>
                         </a>
                         <a href="#" className="text-xl hover:text-gray-400">
-                            <FaXTwitter />
+                            <FaXTwitter/>
                         </a>
                     </div>
                 </div>
