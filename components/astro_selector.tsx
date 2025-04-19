@@ -1,5 +1,5 @@
 "use client";
-import {useState, useEffect} from "react";
+import {useEffect, useState} from "react";
 import {useRouter} from "next/navigation";
 import {useSession} from "next-auth/react";
 
@@ -32,7 +32,7 @@ export default function AstrologerSelector() {
         }, 300);
 
         const reqBody = JSON.stringify({
-            user_id: session?.user?.email,
+            user_id: session?.user?.mappedUser?.id,
             chat_type: selectedAstro?.chat_type,
         })
 
@@ -56,10 +56,7 @@ export default function AstrologerSelector() {
                 setProgress(100);
                 setLoading(false);
 
-                // Redirect to /chat page with query params
-                router.push(
-                    `/chat?chat_id=${data.chat.id}`
-                );
+                router.push(`/chat?chat_id=${data.chat.id}`);
             } catch (error: unknown) {
                 clearInterval(progressInterval);
                 setProgress(100);
