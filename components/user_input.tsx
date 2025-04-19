@@ -185,7 +185,7 @@ export default function InputPage() {
                         transition={{delay: 0.2}}
                     >
                         {/* Full Name */}
-                        <div className="relative">
+                        <div className="relative font-rubik">
                             <FiUser className="absolute left-4 top-1/2 transform -translate-y-1/2 text-white/60"/>
                             <input
                                 type="text"
@@ -193,9 +193,9 @@ export default function InputPage() {
                                 value={formData.name}
                                 onChange={handleChange}
                                 placeholder="Full Name"
-                                className="w-full p-4 pl-12 bg-white/10 text-white border border-white/30 rounded-xl focus:ring-2 focus:ring-blue-400 outline-none backdrop-blur-md placeholder-white/50"
+                                className="w-full p-4 pl-12 bg-white/10 text-white border border-white/30 rounded-xl focus:ring-2 focus:ring-blue-400 outline-none backdrop-blur-md placeholder-white/50 font-rubik"
                             />
-                            {errors.name && <p className="text-red-400 text-sm mt-1">{errors.name}</p>}
+                            {errors.name && <p className="text-red-400 text-sm mt-1 font-rubik">{errors.name}</p>}
                         </div>
 
                         {/* Date of Birth (DOB) */}

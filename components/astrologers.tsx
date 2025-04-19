@@ -8,7 +8,7 @@ import SwiperCore from "swiper";
 
 const astrologers = [
     {
-        name: "Vedica",
+        name: "Vedika",
         role: "The Life Harmonizer",
         description: "Vedika offers personalized insights on your physical and mental well-being. Using your unique birth chart, she guides you toward balanced health and harmony, tailored specifically to your needs.",
         image: "/vedica_astro.png"
