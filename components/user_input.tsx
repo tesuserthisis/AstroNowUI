@@ -165,7 +165,6 @@ export default function InputPage() {
     };
 
     return (
-        <ProtectedRoute>
             <div className="min-h-screen flex items-center justify-center p-6">
                 <motion.div
                     initial={{opacity: 0, scale: 0.9}}
@@ -295,6 +294,5 @@ export default function InputPage() {
                     </motion.form>
                 </motion.div>
             </div>
-        </ProtectedRoute>
     );
 }

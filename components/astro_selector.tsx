@@ -1,12 +1,13 @@
 "use client";
 import {useState, useEffect} from "react";
-import {useRouter} from "next/navigation"; // <-- App Router (Next.js 13+)
+import {useRouter} from "next/navigation";
+import {useSession} from "next-auth/react";
 
 const astrologers = [
-    {name: "Vedika", role: "The Life Harmonizer", image: "/vedica_astro.png"},
-    {name: "Rudra", role: "The Wealth Strategist", image: "/rudra_astro.png"},
-    {name: "Vyom", role: "The Career Navigator", image: "/vyom_astro.png"},
-    {name: "Meher", role: "The Heart Alchemist", image: "/meher_astro.png"},
+    {name: "Vedika", role: "The Life Harmonizer", image: "/vedica_astro.png", chat_type: "HEALTH"},
+    {name: "Rudra", role: "The Wealth Strategist", image: "/rudra_astro.png", chat_type: "WEALTH"},
+    {name: "Vyom", role: "The Career Navigator", image: "/vyom_astro.png", chat_type: "CAREER"},
+    {name: "Meher", role: "The Heart Alchemist", image: "/meher_astro.png", chat_type: "LOVE"},
 ];
 
 export default function AstrologerSelector() {
@@ -14,12 +15,14 @@ export default function AstrologerSelector() {
     const [loading, setLoading] = useState(false);
     const [progress, setProgress] = useState(0);
     const [apiError, setApiError] = useState<string | null>(null);
+    const {data: session} = useSession();
 
     const router = useRouter();
 
     useEffect(() => {
         if (!selected) return;
 
+        const selectedAstro = astrologers.find((a) => a.name === selected);
         setLoading(true);
         setProgress(0);
 
@@ -28,8 +31,10 @@ export default function AstrologerSelector() {
             setProgress((prev) => (prev >= 90 ? 90 : prev + 10));
         }, 300);
 
-        const userId = "9ae21183-d79d-4ce8-84ab-0db3bf948d41";
-        const chatType = "LOVE";
+        const reqBody = JSON.stringify({
+            user_id: session?.user?.email,
+            chat_type: selectedAstro?.chat_type,
+        })
 
         const initializeChat = async () => {
             try {
@@ -38,10 +43,7 @@ export default function AstrologerSelector() {
                     headers: {
                         "Content-Type": "application/json",
                     },
-                    body: JSON.stringify({
-                        user_id: userId,
-                        chat_type: chatType,
-                    }),
+                    body: reqBody,
                 });
 
                 const data = await response.json();

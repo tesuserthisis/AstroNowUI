@@ -2,12 +2,15 @@
 
 import StarsBackground from "@/components/StarsBackground";
 import AstrologerSelector from "@/components/astro_selector";
+import ProtectedRoute from "@/components/ProtectedRoute";
 
 export default function AstroAgents() {
     return (
         <div>
-            <StarsBackground/>
-            <AstrologerSelector/>
+            <ProtectedRoute>
+                <StarsBackground/>
+                <AstrologerSelector/>
+            </ProtectedRoute>
         </div>
     );
 }
