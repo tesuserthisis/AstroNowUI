@@ -1,16 +1,15 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 
-export default function ChatPage() {
+function ChatPageContent() {
     const params = useSearchParams();
     const chat_type = params.get("chat_type");
     const chat_id = params.get("chat_id");
     const user_id = params.get("user_id");
 
-    console.log(chat_type);
-    console.log(chat_id);
-    console.log(user_id);
+    console.log(chat_type, chat_id, user_id);
 
     return (
         <div className="min-h-screen flex flex-col items-center justify-center p-8 text-black">
@@ -19,5 +18,13 @@ export default function ChatPage() {
             <p><strong>Chat ID:</strong> {chat_id}</p>
             <p><strong>User ID:</strong> {user_id}</p>
         </div>
+    );
+}
+
+export default function ChatPage() {
+    return (
+        <Suspense fallback={<div className="text-white">Loading chat...</div>}>
+            <ChatPageContent />
+        </Suspense>
     );
 }
