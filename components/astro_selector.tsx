@@ -56,7 +56,7 @@ export default function AstrologerSelector() {
 
                 // Redirect to /chat page with query params
                 router.push(
-                    `/chat?chat_type=${data.chat.chat_type}&chat_id=${data.chat.id}&user_id=${data.chat.user_id}`
+                    `/chat?chat_id=${data.chat.id}`
                 );
             } catch (error: unknown) {
                 clearInterval(progressInterval);
