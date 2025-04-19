@@ -153,7 +153,7 @@ export default function InputPage() {
 
             if (!res.ok) throw new Error("Failed to submit user data");
 
-            router.push("/astro-agents")
+            router.replace("/astro-agents")
         } catch (error) {
             console.error(error);
             alert("There was an error submitting your data.");
