@@ -14,13 +14,34 @@ export default function NavBar() {
                 <img src="/logo.svg" alt="AstroNow.AI" className="h-12 md:h-20" />
             </div>
 
-            {/* Mobile Menu Button */}
-            <button
-                className="md:hidden text-2xl"
-                onClick={() => setIsMenuOpen(!isMenuOpen)}
-            >
-                {isMenuOpen ? <HiOutlineX /> : <HiOutlineMenu />}
-            </button>
+            {/* Mobile - Login + Hamburger */}
+            <div className="flex items-center gap-4 md:hidden ml-auto">
+                {session ? (
+                    <button
+                        onClick={() => signOut({ callbackUrl: "/signout" })}
+                        className="border px-4 py-1 rounded-full text-white text-sm font-inter font-semibold"
+                        style={{ borderColor: "#d3d3d3" }}
+                    >
+                        Sign Out
+                    </button>
+                ) : (
+                    <button
+                        onClick={() => signIn("google")}
+                        className="border px-4 py-1 rounded-full text-white text-sm font-inter font-semibold"
+                        style={{ borderColor: "#d3d3d3" }}
+                    >
+                        Login
+                    </button>
+                )}
+
+                {/* Hamburger Icon */}
+                <button
+                    className="text-2xl"
+                    onClick={() => setIsMenuOpen(!isMenuOpen)}
+                >
+                    {isMenuOpen ? <HiOutlineX /> : <HiOutlineMenu />}
+                </button>
+            </div>
 
             {/* Center - Links */}
             <div
@@ -42,7 +63,7 @@ export default function NavBar() {
                 <a href="#blog" onClick={(e) => handleScroll(e, "blog")} className="py-2 md:py-0">Blog</a>
             </div>
 
-            {/* Right - Login/Logout Button */}
+            {/* Desktop - Login/Logout */}
             <div className="hidden md:block">
                 {session ? (
                     <button
