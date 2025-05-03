@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import {signIn} from "next-auth/react";
+import { signIn } from "next-auth/react";
 
 const plans = [
     {
@@ -52,7 +52,7 @@ export default function PricingPlans() {
                 setCurrency(data.country === "IN" ? "INR" : "USD");
             } catch (error) {
                 console.error("Error fetching currency:", error);
-                setCurrency("USD"); // Default to USD
+                setCurrency("USD");
             }
         }
 
@@ -60,33 +60,41 @@ export default function PricingPlans() {
     }, []);
 
     return (
-        <section id="pricing" className="text-white py-16 px-8 text-center">
-            <h2 className="text-[48px] font-playfair regular mb-4">Pricing Plans</h2>
-            <p className="mb-8 max-w-2xl mx-auto font-poppins font-medium">
+        <section id="pricing" className="text-white py-12 px-4 md:py-16 md:px-8 text-center">
+            <h2 className="text-3xl md:text-[48px] font-playfair mb-4">Pricing Plans</h2>
+            <p className="mb-8 max-w-2xl mx-auto font-poppins text-sm md:text-base font-medium">
                 At AstroNow.AI, we offer flexible plans designed to provide you with AI-powered astrological insights
                 tailored to your needs.
             </p>
-            <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 md:gap-8 max-w-6xl mx-auto">
                 {plans.map((plan, index) => (
                     <div
                         key={index}
                         className="border-2 border-white text-white p-6 rounded-2xl shadow-lg flex flex-col justify-between h-full"
                     >
                         <div>
-                            <img className="mx-auto my-4" src={plan.image} alt={plan.name} />
-                            <h3 className="text-xl font-semibold mb-2 font-inter">{plan.name}</h3>
-                            <p className="text-2xl font-bold mb-4 font-inter">
+                            <img
+                                className="mx-auto my-4 max-h-28 w-auto"
+                                src={plan.image}
+                                alt={plan.name}
+                            />
+                            <h3 className="text-lg md:text-xl font-semibold mb-2 font-inter">{plan.name}</h3>
+                            <p className="text-xl md:text-2xl font-bold mb-4 font-inter">
                                 {currency === "INR" ? plan.priceINR : plan.price}
                             </p>
-                            <ul className="mb-6 text-left font-inter font-regular">
+                            <ul className="mb-6 text-left font-inter text-sm md:text-base">
                                 {plan.features.map((feature, i) => (
-                                    <li key={i} className="flex items-center gap-2 mb-2">
+                                    <li key={i} className="flex items-start gap-2 mb-2">
                                         ✅ {feature}
                                     </li>
                                 ))}
                             </ul>
                         </div>
-                        <button onClick={() => signIn("google")} className="w-full bg-white text-black font-semibold rounded-xl py-2 mt-auto cursor-pointer">
+                        <button
+                            onClick={() => signIn("google")}
+                            className="w-full bg-white text-black font-semibold rounded-xl py-2 md:py-2.5 mt-auto transition hover:bg-gray-200"
+                        >
                             Get started
                         </button>
                     </div>

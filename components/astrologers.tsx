@@ -37,57 +37,62 @@ export default function AstrologersSection() {
     const swiperRef = useRef<SwiperCore | null>(null);
 
     return (
-        <section id="astrologers" className="p-12 text-white text-center">
-            <h3 className="text-4xl font-playfair mb-8">Connect with Your Expert AI Astrologers</h3>
-            <div>
-                <Swiper
-                    modules={[EffectCoverflow]}
-                    effect="coverflow"
-                    centeredSlides={true}
-                    loop={true}
-                    slidesPerView={2}
-                    spaceBetween={100}
-                    coverflowEffect={{
-                        rotate: 0,
-                        depth: 200,
-                    }}
-                    breakpoints={{
-                        640: { slidesPerView: 1 },
-                        1024: { slidesPerView: 2 }
-                    }}
-                    onSwiper={(swiper) => (swiperRef.current = swiper)} // Store swiper instance
-                    className="pb-12" // Adds space for navigation buttons
-                >
-                    {astrologers.map((astro, index) => (
-                        <SwiperSlide key={index} className="transform transition-transform duration-300">
-                            <div className="relative flex flex-col items-center bg-gray-900 p-4 rounded-xl shadow-lg">
-                                <img src={astro.image} alt={astro.name}
-                                     className="w-40 h-40 md:w-56 md:h-56 rounded-full shadow-lg"/>
-                                <div className="mt-4">
-                                    <h4 className="text-2xl font-dm-sans">{astro.name}</h4>
-                                    <p className="text-gray-300 font-inter">{astro.role}</p>
-                                    <p className="mt-2 font-inter max-w-lg">{astro.description}</p>
-                                </div>
-                            </div>
-                        </SwiperSlide>
-                    ))}
-                </Swiper>
+        <section id="astrologers" className="px-4 py-8 md:p-12 text-white text-center">
+            <h3 className="text-2xl md:text-4xl font-playfair mb-6 md:mb-8">
+                Connect with Your Expert AI Astrologers
+            </h3>
 
-                {/* Custom Navigation Buttons */}
-                <div className="flex justify-center mt-6 space-x-4">
-                    <button
-                        onClick={() => swiperRef.current?.slidePrev()}
-                        className="p-3 bg-gray-800 bg-opacity-50 rounded-full transition-all hover:bg-gray-600"
-                    >
-                        <ChevronLeft size={32} />
-                    </button>
-                    <button
-                        onClick={() => swiperRef.current?.slideNext()}
-                        className="p-3 bg-gray-800 bg-opacity-50 rounded-full transition-all hover:bg-gray-600"
-                    >
-                        <ChevronRight size={32} />
-                    </button>
-                </div>
+            <Swiper
+                modules={[EffectCoverflow]}
+                effect="coverflow"
+                centeredSlides={true}
+                loop={true}
+                slidesPerView={1}
+                spaceBetween={50}
+                coverflowEffect={{
+                    rotate: 0,
+                    depth: 200,
+                }}
+                breakpoints={{
+                    768: { slidesPerView: 2 }
+                }}
+                onSwiper={(swiper) => (swiperRef.current = swiper)}
+                className="pb-12"
+            >
+                {astrologers.map((astro, index) => (
+                    <SwiperSlide key={index} className="transform transition-transform duration-300 px-2">
+                        <div className="relative flex flex-col items-center bg-gray-900 p-4 rounded-xl shadow-lg">
+                            <img
+                                src={astro.image}
+                                alt={astro.name}
+                                className="w-32 h-32 md:w-56 md:h-56 rounded-full shadow-lg object-cover"
+                            />
+                            <div className="mt-4">
+                                <h4 className="text-xl md:text-2xl font-dm-sans">{astro.name}</h4>
+                                <p className="text-gray-300 font-inter text-sm md:text-base">{astro.role}</p>
+                                <p className="mt-2 font-inter text-sm md:text-base max-w-md mx-auto">
+                                    {astro.description}
+                                </p>
+                            </div>
+                        </div>
+                    </SwiperSlide>
+                ))}
+            </Swiper>
+
+            {/* Navigation Buttons */}
+            <div className="flex justify-center mt-6 space-x-4">
+                <button
+                    onClick={() => swiperRef.current?.slidePrev()}
+                    className="p-3 bg-gray-800 bg-opacity-50 rounded-full transition-all hover:bg-gray-600"
+                >
+                    <ChevronLeft size={28} />
+                </button>
+                <button
+                    onClick={() => swiperRef.current?.slideNext()}
+                    className="p-3 bg-gray-800 bg-opacity-50 rounded-full transition-all hover:bg-gray-600"
+                >
+                    <ChevronRight size={28} />
+                </button>
             </div>
         </section>
     );

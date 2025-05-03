@@ -23,25 +23,32 @@ const features = [
 
 export default function Feature() {
     return (
-        <section id="features" className="text-white text-center relative py-10">
-            {/* Background with stars effect */}
+        <section id="features" className="text-white text-center relative py-10 px-4">
+            {/* Background effect if needed */}
             <div className="absolute inset-0 opacity-30"></div>
 
             {/* Title and description */}
-            <h2 style={{ letterSpacing: '0.2px' }} className="text-[48px] font-playfair font-normal relative z-10">
+            <h2
+                style={{ letterSpacing: '0.2px' }}
+                className="text-3xl md:text-[48px] font-playfair font-normal relative z-10"
+            >
                 What is AstroNow.AI?
             </h2>
-            <p className="mt-4 text-lg max-w-2xl mx-auto relative z-10 font-dm-sans">
+            <p className="mt-4 text-base md:text-lg max-w-2xl mx-auto relative z-10 font-dm-sans">
                 Unlock the wisdom of the stars with AI-powered astrology, available 24/7 at your fingertips! Our four expert virtual astrologers decode your health, career, finance, and love life using your unique birth chart—bringing you personalized, accurate insights in a private and judgment-free space. No fear-mongering, no human intervention—just pure cosmic guidance, anytime you need it! ✨
             </p>
 
             {/* Features grid */}
-            <div className="mt-12 flex flex-wrap justify-center gap-8 relative z-10">
+            <div className="mt-12 grid gap-10 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 relative z-10">
                 {features.map((feature, index) => (
-                    <div key={index} className="max-w-xs text-center">
-                        <img src={feature.imgSrc} alt={feature.altText} className="rounded-full w-40 h-40 mx-auto" />
-                        <p className="mt-4 font-inter font-bold">{feature.subtext}</p>
-                        <p className="mt-2 font-inter">{feature.description}</p>
+                    <div key={index} className="max-w-xs mx-auto text-center">
+                        <img
+                            src={feature.imgSrc}
+                            alt={feature.altText}
+                            className="rounded-full w-32 h-32 md:w-40 md:h-40 mx-auto object-cover"
+                        />
+                        <p className="mt-4 font-inter font-bold text-sm md:text-base">{feature.subtext}</p>
+                        <p className="mt-2 font-inter text-sm md:text-base">{feature.description}</p>
                     </div>
                 ))}
             </div>

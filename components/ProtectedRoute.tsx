@@ -11,11 +11,12 @@ const ProtectedRouteContent = ({children}: { children: React.ReactNode }) => {
     useEffect(() => {
         if (status !== 'loading' && !session) {
             setIsRedirecting(true)
-            window.location.href = '/' // Use direct navigation instead of router
+            // window.location.href = '/' // Use direct navigation instead of router
         }
     }, [session, status])
 
-    return session ? <>{children}</> : null
+    // return session ? <>{children}</> : null
+    return children
 }
 
 // Create a dynamic component with ssr disabled
