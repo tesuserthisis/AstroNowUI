@@ -55,7 +55,7 @@ export default function AstrologerSelector() {
                 setProgress(100);
                 setLoading(false);
 
-                router.push(`/chat?chat_id=${data.chat.id}`);
+                router.push(`/chat/${data.chat.id}`);
             } catch (error: unknown) {
                 clearInterval(progressInterval);
                 setProgress(100);
