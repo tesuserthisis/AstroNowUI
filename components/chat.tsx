@@ -61,7 +61,7 @@ export default function Chat() {
             });
 
             const data = await response.json();
-            const fullText: string = data.reply || "🌟 The cosmos are silent for now...";
+            const fullText: string = data.next_message || "🌟 The cosmos are silent for now...";
             let index = 0;
             let animatedText = "";
 
