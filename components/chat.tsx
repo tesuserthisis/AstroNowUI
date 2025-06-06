@@ -1,13 +1,14 @@
 "use client";
 
-import {useEffect, useRef, useState} from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import {useParams} from "next/navigation";
-import {useSession} from "next-auth/react";
-import {astrologers} from "@/components/utils/const";
+import { useParams } from "next/navigation";
+import { useSession } from "next-auth/react";
+import { astrologers } from "@/components/utils/const";
+import {Shimmer} from "@/components/shimmer";
 
 const getCurrentTime = () =>
-    new Date().toLocaleTimeString([], {hour: "2-digit", minute: "2-digit"});
+    new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
 
 interface Message {
     from: "user" | "bot";
@@ -28,13 +29,13 @@ interface ChatApiMessage {
 export default function Chat() {
     const rawParams = useParams();
     const id = typeof rawParams?.id === "string" ? rawParams.id : "";
-    const {data: session} = useSession();
+    const { data: session } = useSession();
     const [messages, setMessages] = useState<Message[]>([]);
     const [input, setInput] = useState("");
     const [isTyping, setIsTyping] = useState(false);
     const [loading, setLoading] = useState(false);
     const messagesEndRef = useRef<HTMLDivElement | null>(null);
-    const [astrologer, setAstrologer] = useState(astrologers[0]); // fallback default
+    const [astrologer, setAstrologer] = useState<typeof astrologers[0] | null>(null);
 
     useEffect(() => {
         setLoading(true);
@@ -45,19 +46,20 @@ export default function Chat() {
 
                 if (!Array.isArray(data.chat)) throw new Error("Invalid format");
 
-                const formattedMessages: Message[] = data.chat.map((item: ChatApiMessage) => ({
-                    from: item.actor === "HUMAN" ? "user" : "bot",
-                    text: item.message,
-                    time: new Date(item.created_at).toLocaleTimeString([], {
-                        hour: "2-digit",
-                        minute: "2-digit",
-                    }),
-                }));
+                const formattedMessages: Message[] = data.chat.map(
+                    (item: ChatApiMessage) => ({
+                        from: item.actor === "HUMAN" ? "user" : "bot",
+                        text: item.message,
+                        time: new Date(item.created_at).toLocaleTimeString([], {
+                            hour: "2-digit",
+                            minute: "2-digit",
+                        }),
+                    })
+                );
 
                 setMessages(formattedMessages);
                 const matched = getAstrologerByChatType(data.chat_type);
                 if (matched) setAstrologer(matched);
-
             } catch (error) {
                 console.error("Failed to fetch chat history:", error);
                 setMessages([
@@ -73,11 +75,10 @@ export default function Chat() {
         };
 
         fetchChat();
-
     }, [id]);
 
     useEffect(() => {
-        messagesEndRef.current?.scrollIntoView({behavior: "smooth"});
+        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
     }, [messages]);
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -162,23 +163,37 @@ export default function Chat() {
         <div className="flex h-screen bg-white text-gray-900">
             {/* Sidebar */}
             <aside className="hidden md:flex flex-col items-center w-80 bg-white border-r shadow p-6 space-y-4">
-                <Image
-                    src={astrologer.image}
-                    alt={astrologer.name}
-                    width={96}
-                    height={96}
-                    className="rounded-full"
-                />
-                <h2 className="text-xl font-bold">Luna Starseer</h2>
-                <p className="text-center text-gray-600 text-sm">
-                    Your celestial guide through the mysteries of the universe.
-                </p>
+                {loading || !astrologer ? (
+                    <>
+                        <Shimmer className="w-24 h-24 rounded-full" />
+                        <Shimmer className="w-3/4 h-6 mt-4" />
+                        <Shimmer className="w-full h-20 mt-2" />
+                    </>
+                ) : (
+                    <>
+                        <Image
+                            src={astrologer.image}
+                            alt={astrologer.name}
+                            width={96}
+                            height={96}
+                            className="rounded-full"
+                        />
+                        <h2 className="text-xl font-bold">{astrologer.role}.</h2>
+                        <p className="text-center text-gray-600 text-sm">{astrologer.description}</p>
+                    </>
+                )}
             </aside>
+
 
             <main className="flex-1 flex flex-col">
                 <div className="flex-1 overflow-y-auto p-6 flex flex-col gap-4">
                     {loading ? (
-                        <div className="text-center text-gray-500 mt-4">🔄 Loading your previous messages...</div>
+                        <>
+                            <Shimmer className="w-2/3 h-6 rounded-xl self-start" />
+                            <Shimmer className="w-1/2 h-6 rounded-xl self-end" />
+                            <Shimmer className="w-2/3 h-6 rounded-xl self-start" />
+                            <Shimmer className="w-1/3 h-6 rounded-xl self-end" />
+                        </>
                     ) : (
                         messages.map((msg, idx) => (
                             <div
@@ -196,15 +211,14 @@ export default function Chat() {
                     )}
 
                     {isTyping && !loading && (
-                        <div
-                            className="self-start bg-gray-100 text-gray-800 px-4 py-3 rounded-xl shadow max-w-xs flex items-center gap-1">
-                            <span className="dot animate-bounce"/>
-                            <span className="dot animate-bounce delay-200"/>
-                            <span className="dot animate-bounce delay-400"/>
+                        <div className="self-start bg-gray-100 text-gray-800 px-4 py-3 rounded-xl shadow max-w-xs flex items-center gap-1">
+                            <span className="dot animate-bounce" />
+                            <span className="dot animate-bounce delay-200" />
+                            <span className="dot animate-bounce delay-400" />
                         </div>
                     )}
 
-                    <div ref={messagesEndRef}/>
+                    <div ref={messagesEndRef} />
                 </div>
 
                 {/* Input Field */}
@@ -227,30 +241,31 @@ export default function Chat() {
 
             {/* Typing Animation Styles */}
             <style jsx>{`
-                .dot {
-                    width: 8px;
-                    height: 8px;
-                    background-color: #6366f1;
-                    border-radius: 50%;
-                }
+        .dot {
+          width: 8px;
+          height: 8px;
+          background-color: #6366f1;
+          border-radius: 50%;
+        }
 
-                .animate-bounce {
-                    animation: bounce 1s infinite ease-in-out;
-                }
+        .animate-bounce {
+          animation: bounce 1s infinite ease-in-out;
+        }
 
-                @keyframes bounce {
-                    0%, 80%, 100% {
-                        transform: scale(0);
-                    }
-                    40% {
-                        transform: scale(1);
-                    }
-                }
-            `}</style>
+        @keyframes bounce {
+          0%,
+          80%,
+          100% {
+            transform: scale(0);
+          }
+          40% {
+            transform: scale(1);
+          }
+        }
+      `}</style>
         </div>
     );
 }
 
 const getAstrologerByChatType = (chatType: string) =>
     astrologers.find((a) => a.key === chatType);
-

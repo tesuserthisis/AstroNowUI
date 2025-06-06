@@ -5,8 +5,8 @@ import ProtectedRoute from "@/components/ProtectedRoute";
 
 export default function ChatPage() {
     return (<div>
-        <ProtectedRoute>
+        {/*<ProtectedRoute>*/}
             <Chat/>
-        </ProtectedRoute>
+        {/*</ProtectedRoute>*/}
     </div>)
 }
