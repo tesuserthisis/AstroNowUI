@@ -4,6 +4,7 @@ import {useEffect, useRef, useState} from "react";
 import Image from "next/image";
 import {useParams} from "next/navigation";
 import {useSession} from "next-auth/react";
+import {astrologers} from "@/components/utils/const";
 
 const getCurrentTime = () =>
     new Date().toLocaleTimeString([], {hour: "2-digit", minute: "2-digit"});
@@ -17,6 +18,7 @@ interface Message {
 interface ChatApiMessage {
     actor: "AI" | "HUMAN";
     chat_id: string;
+    chat_type: string;
     created_at: string;
     id: string;
     message: string;
@@ -32,6 +34,7 @@ export default function Chat() {
     const [isTyping, setIsTyping] = useState(false);
     const [loading, setLoading] = useState(false);
     const messagesEndRef = useRef<HTMLDivElement | null>(null);
+    const [astrologer, setAstrologer] = useState(astrologers[0]); // fallback default
 
     useEffect(() => {
         setLoading(true);
@@ -52,6 +55,9 @@ export default function Chat() {
                 }));
 
                 setMessages(formattedMessages);
+                const matched = getAstrologerByChatType(data.chat_type);
+                if (matched) setAstrologer(matched);
+
             } catch (error) {
                 console.error("Failed to fetch chat history:", error);
                 setMessages([
@@ -157,8 +163,8 @@ export default function Chat() {
             {/* Sidebar */}
             <aside className="hidden md:flex flex-col items-center w-80 bg-white border-r shadow p-6 space-y-4">
                 <Image
-                    src="/astrologer-avatar.png"
-                    alt="Astrologer Profile"
+                    src={astrologer.image}
+                    alt={astrologer.name}
                     width={96}
                     height={96}
                     className="rounded-full"
@@ -244,3 +250,7 @@ export default function Chat() {
         </div>
     );
 }
+
+const getAstrologerByChatType = (chatType: string) =>
+    astrologers.find((a) => a.key === chatType);
+
