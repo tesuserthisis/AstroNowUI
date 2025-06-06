@@ -14,21 +14,61 @@ interface Message {
     time: string;
 }
 
+interface ChatApiMessage {
+    actor: "AI" | "HUMAN";
+    chat_id: string;
+    created_at: string;
+    id: string;
+    message: string;
+    updated_at: string;
+}
+
 export default function Chat() {
-    const {id} = useParams<{ id: string }>();
+    const rawParams = useParams();
+    const id = typeof rawParams?.id === "string" ? rawParams.id : "";
     const {data: session} = useSession();
-
-    const [messages, setMessages] = useState<Message[]>([
-        {
-            from: "bot",
-            text: "🔮 Welcome, seeker. What question do you have for the stars today?",
-            time: getCurrentTime(),
-        },
-    ]);
-
+    const [messages, setMessages] = useState<Message[]>([]);
     const [input, setInput] = useState("");
     const [isTyping, setIsTyping] = useState(false);
+    const [loading, setLoading] = useState(false);
     const messagesEndRef = useRef<HTMLDivElement | null>(null);
+
+    useEffect(() => {
+        setLoading(true);
+        const fetchChat = async () => {
+            try {
+                const response = await fetch(`https://astronowai.fly.dev/chat/${id}`);
+                const data = await response.json();
+
+                if (!Array.isArray(data.chat)) throw new Error("Invalid format");
+
+                const formattedMessages: Message[] = data.chat.map((item: ChatApiMessage) => ({
+                    from: item.actor === "HUMAN" ? "user" : "bot",
+                    text: item.message,
+                    time: new Date(item.created_at).toLocaleTimeString([], {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                    }),
+                }));
+
+                setMessages(formattedMessages);
+            } catch (error) {
+                console.error("Failed to fetch chat history:", error);
+                setMessages([
+                    {
+                        from: "bot",
+                        text: "⚠️ Could not load previous chat history.",
+                        time: getCurrentTime(),
+                    },
+                ]);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchChat();
+
+    }, [id]);
 
     useEffect(() => {
         messagesEndRef.current?.scrollIntoView({behavior: "smooth"});
@@ -47,6 +87,7 @@ export default function Chat() {
         setMessages((prev) => [...prev, userMessage]);
         setInput("");
         setIsTyping(true);
+
         try {
             const response = await fetch("https://astronowai.fly.dev/chat", {
                 method: "POST",
@@ -55,7 +96,7 @@ export default function Chat() {
                 },
                 body: JSON.stringify({
                     chat_id: id,
-                    user_id: session?.user?.mappedUser?.id,
+                    user_id: session?.user?.mappedUser?.id ?? "anonymous",
                     query: userMessage.text,
                 }),
             });
@@ -64,38 +105,41 @@ export default function Chat() {
             const fullText: string = data.next_message || "🌟 The cosmos are silent for now...";
             let index = 0;
             let animatedText = "";
+            let botMsgIndex = 0;
+
+            setMessages((prev) => {
+                const updated = [
+                    ...prev,
+                    {
+                        from: "bot" as const,
+                        text: "",
+                        time: getCurrentTime(),
+                    },
+                ];
+                botMsgIndex = updated.length - 1;
+                return updated;
+            });
 
             const animateTyping = () => {
                 if (index < fullText.length) {
-                    animatedText += fullText[index];
-                    index++;
-                    setMessages((prev) => [
-                        ...prev.slice(0, -1),
-                        {
-                            from: "bot",
+                    animatedText += fullText[index++];
+                    setMessages((prev) => {
+                        const updated = [...prev];
+                        updated[botMsgIndex] = {
+                            ...updated[botMsgIndex],
                             text: animatedText,
-                            time: getCurrentTime(),
-                        },
-                    ]);
+                        };
+                        return updated;
+                    });
                     setTimeout(animateTyping, 30);
                 } else {
                     setIsTyping(false);
                 }
             };
 
-            // Add empty bot message first for animation
-            setMessages((prev) => [
-                ...prev,
-                {
-                    from: "bot",
-                    text: "",
-                    time: getCurrentTime(),
-                },
-            ]);
-
             animateTyping();
         } catch (error) {
-            console.error(error);
+            console.error("Chat error:", error);
             setMessages((prev) => [
                 ...prev,
                 {
@@ -127,34 +171,37 @@ export default function Chat() {
 
             <main className="flex-1 flex flex-col">
                 <div className="flex-1 overflow-y-auto p-6 flex flex-col gap-4">
-                    {messages.map((msg, idx) => (
-                        <div
-                            key={idx}
-                            className={`max-w-sm md:max-w-md px-4 py-3 rounded-xl shadow ${
-                                msg.from === "user"
-                                    ? "bg-indigo-500 text-white self-end"
-                                    : "bg-indigo-100 text-indigo-900 self-start"
-                            }`}
-                        >
-                            <div className="text-sm">{msg.text}</div>
-                            <div className="text-xs text-gray-500 mt-1 text-right">{msg.time}</div>
-                        </div>
-                    ))}
+                    {loading ? (
+                        <div className="text-center text-gray-500 mt-4">🔄 Loading your previous messages...</div>
+                    ) : (
+                        messages.map((msg, idx) => (
+                            <div
+                                key={idx}
+                                className={`max-w-sm md:max-w-md px-4 py-3 rounded-xl shadow ${
+                                    msg.from === "user"
+                                        ? "bg-indigo-500 text-white self-end"
+                                        : "bg-indigo-100 text-indigo-900 self-start"
+                                }`}
+                            >
+                                <div className="text-sm">{msg.text}</div>
+                                <div className="text-xs text-gray-500 mt-1 text-right">{msg.time}</div>
+                            </div>
+                        ))
+                    )}
 
-                    {isTyping && (
+                    {isTyping && !loading && (
                         <div
-                            className="self-start bg-gray-100 text-gray-800 px-4 py-3 rounded-xl shadow max-w-xs flex items-center gap-1"
-                        >
-                            <span className="dot animate-bounce" />
-                            <span className="dot animate-bounce delay-200" />
-                            <span className="dot animate-bounce delay-400" />
+                            className="self-start bg-gray-100 text-gray-800 px-4 py-3 rounded-xl shadow max-w-xs flex items-center gap-1">
+                            <span className="dot animate-bounce"/>
+                            <span className="dot animate-bounce delay-200"/>
+                            <span className="dot animate-bounce delay-400"/>
                         </div>
                     )}
 
-                    <div ref={messagesEndRef} />
+                    <div ref={messagesEndRef}/>
                 </div>
 
-                {/* Input */}
+                {/* Input Field */}
                 <form onSubmit={handleSubmit} className="p-4 border-t flex gap-2 bg-white">
                     <input
                         type="text"
@@ -172,7 +219,7 @@ export default function Chat() {
                 </form>
             </main>
 
-            {/* Typing animation style */}
+            {/* Typing Animation Styles */}
             <style jsx>{`
                 .dot {
                     width: 8px;
@@ -183,14 +230,6 @@ export default function Chat() {
 
                 .animate-bounce {
                     animation: bounce 1s infinite ease-in-out;
-                }
-
-                .animate-bounce.delay-200 {
-                    animation-delay: 0.2s;
-                }
-
-                .animate-bounce.delay-400 {
-                    animation-delay: 0.4s;
                 }
 
                 @keyframes bounce {
