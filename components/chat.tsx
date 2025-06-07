@@ -5,7 +5,8 @@ import Image from "next/image";
 import { useParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { astrologers } from "@/components/utils/const";
-import {Shimmer} from "@/components/shimmer";
+import { Shimmer } from "@/components/shimmer";
+import ReactMarkdown from "react-markdown";
 
 const getCurrentTime = () =>
     new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
@@ -26,6 +27,13 @@ interface ChatApiMessage {
     updated_at: string;
 }
 
+interface PastChats {
+    chat_id: string;
+    chat_type: string;
+    related_chats: { id: string }[];
+    user_id: string;
+}
+
 export default function Chat() {
     const rawParams = useParams();
     const id = typeof rawParams?.id === "string" ? rawParams.id : "";
@@ -34,34 +42,38 @@ export default function Chat() {
     const [input, setInput] = useState("");
     const [isTyping, setIsTyping] = useState(false);
     const [loading, setLoading] = useState(false);
-    const messagesEndRef = useRef<HTMLDivElement | null>(null);
     const [astrologer, setAstrologer] = useState<typeof astrologers[0] | null>(null);
+    const [chatHistory, setChatHistory] = useState<PastChats | null>(null);
+    const [loadingHistory, setLoadingHistory] = useState(true);
+    const [showAstroInfo, setShowAstroInfo] = useState(false);
+    const [showChatHistory, setShowChatHistory] = useState(false);
+    const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
     useEffect(() => {
-        setLoading(true);
         const fetchChat = async () => {
+            setLoading(true);
             try {
-                const response = await fetch(`https://astronowai.fly.dev/chat/${id}`);
+                const response = await fetch(`https://astronowai.fly.dev/chat/${id}/history/`);
                 const data = await response.json();
 
                 if (!Array.isArray(data.chat)) throw new Error("Invalid format");
 
-                const formattedMessages: Message[] = data.chat.map(
-                    (item: ChatApiMessage) => ({
-                        from: item.actor === "HUMAN" ? "user" : "bot",
-                        text: item.message,
-                        time: new Date(item.created_at).toLocaleTimeString([], {
-                            hour: "2-digit",
-                            minute: "2-digit",
-                        }),
-                    })
-                );
+                const formattedMessages: Message[] = data.chat.map((item: ChatApiMessage) => ({
+                    from: item.actor === "HUMAN" ? "user" : "bot",
+                    text: item.message,
+                    time: new Date(item.created_at).toLocaleTimeString([], {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                    }),
+                }));
 
                 setMessages(formattedMessages);
+
                 const matched = getAstrologerByChatType(data.chat_type);
                 if (matched) setAstrologer(matched);
+
             } catch (error) {
-                console.error("Failed to fetch chat history:", error);
+                console.error("Failed to fetch chat:", error);
                 setMessages([
                     {
                         from: "bot",
@@ -74,8 +86,28 @@ export default function Chat() {
             }
         };
 
+        const fetchChatHistory = async () => {
+            try {
+                // session?.user?.mappedUser?.id='674e6a93-0729-412f-adad-6a27eb697cdb';
+                // if (!session?.user?.mappedUser?.id) return;
+                setLoadingHistory(true)
+                const res = await fetch(
+                    `https://astronowai.fly.dev/chats/${id}?user_id=${'674e6a93-0729-412f-adad-6a27eb697cdb'}`
+                );
+
+                const data: PastChats = await res.json();
+                setChatHistory(data);
+            } catch (err) {
+                console.error("Failed to fetch chat history", err);
+            } finally {
+                setLoadingHistory(false);
+            }
+        };
+
         fetchChat();
-    }, [id]);
+        fetchChatHistory();
+    }, [id, session?.user?.mappedUser?.id]);
+
 
     useEffect(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -98,9 +130,7 @@ export default function Chat() {
         try {
             const response = await fetch("https://astronowai.fly.dev/chat", {
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
+                headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     chat_id: id,
                     user_id: session?.user?.mappedUser?.id ?? "anonymous",
@@ -115,14 +145,7 @@ export default function Chat() {
             let botMsgIndex = 0;
 
             setMessages((prev) => {
-                const updated = [
-                    ...prev,
-                    {
-                        from: "bot" as const,
-                        text: "",
-                        time: getCurrentTime(),
-                    },
-                ];
+                const updated = [...prev, { from: "bot" as const, text: "", time: getCurrentTime() }];
                 botMsgIndex = updated.length - 1;
                 return updated;
             });
@@ -132,10 +155,7 @@ export default function Chat() {
                     animatedText += fullText[index++];
                     setMessages((prev) => {
                         const updated = [...prev];
-                        updated[botMsgIndex] = {
-                            ...updated[botMsgIndex],
-                            text: animatedText,
-                        };
+                        updated[botMsgIndex].text = animatedText;
                         return updated;
                     });
                     setTimeout(animateTyping, 30);
@@ -160,55 +180,97 @@ export default function Chat() {
     };
 
     return (
-        <div className="flex h-screen bg-white text-gray-900">
-            {/* Sidebar */}
-            <aside className="hidden md:flex flex-col items-center w-80 bg-white border-r shadow p-6 space-y-4">
-                {loading || !astrologer ? (
-                    <>
-                        <Shimmer className="w-24 h-24 rounded-full" />
-                        <Shimmer className="w-3/4 h-6 mt-4" />
-                        <Shimmer className="w-full h-20 mt-2" />
-                    </>
-                ) : (
-                    <>
-                        <Image
-                            src={astrologer.image}
-                            alt={astrologer.name}
-                            width={96}
-                            height={96}
-                            className="rounded-full"
-                        />
-                        <h2 className="text-xl font-bold">{astrologer.role}.</h2>
-                        <p className="text-center text-gray-600 text-sm">{astrologer.description}</p>
-                    </>
+        <div className="flex flex-col h-screen bg-white text-gray-900 md:flex-row">
+            {/* Mobile Toggle Buttons */}
+            <div className="md:hidden flex gap-2 p-4 border-b">
+                <button
+                    onClick={() => setShowAstroInfo((prev) => !prev)}
+                    className="flex-1 px-3 py-2 text-sm bg-indigo-500 text-white rounded-md"
+                >
+                    {showAstroInfo ? "Hide Info" : "View Astrologer"}
+                </button>
+                <button
+                    onClick={() => setShowChatHistory((prev) => !prev)}
+                    className="flex-1 px-3 py-2 text-sm bg-indigo-500 text-white rounded-md"
+                >
+                    {showChatHistory ? "Hide History" : "View History"}
+                </button>
+            </div>
+
+            {/* Sidebar (Astrologer Info + Chat History) */}
+            <aside className={`w-full md:w-80 border-r shadow p-4 md:block ${showAstroInfo || showChatHistory ? "block" : "hidden"} md:!block`}>
+                {showAstroInfo || !showChatHistory ? (
+                    loading || !astrologer ? (
+                        <>
+                            <Shimmer className="w-24 h-24 rounded-full mx-auto" />
+                            <Shimmer className="w-3/4 h-6 mt-4 mx-auto" />
+                            <Shimmer className="w-full h-20 mt-2" />
+                        </>
+                    ) : (
+                        <>
+                            <Image src={astrologer.image} alt={astrologer.name} width={96} height={96} className="rounded-full mx-auto" />
+                            <h2 className="text-xl font-bold text-center mt-2">{astrologer.role}</h2>
+                            <p className="text-center text-sm text-gray-600 mt-1">{astrologer.description}</p>
+                        </>
+                    )
+                ) : null}
+
+                {(showChatHistory || !showAstroInfo) && (
+                    <div className="mt-6">
+                        {loadingHistory ? (
+                            <div className="space-y-2 max-h-64 overflow-y-auto">
+                                {Array.from({ length: 4 }).map((_, i) => (
+                                    <Shimmer key={i} className="w-full h-5 rounded-md" />
+                                ))}
+                            </div>
+                        ) : chatHistory && chatHistory.related_chats.length > 0 ? (
+                            <>
+                                <h3 className="text-sm font-semibold text-gray-700 mb-2">Past Chats</h3>
+                                <div className="space-y-2 max-h-64 overflow-y-auto">
+                                    {chatHistory.related_chats.map((chat) => (
+                                        <div
+                                            key={chat.id}
+                                            className="text-sm text-gray-800 bg-gray-100 hover:bg-gray-200 cursor-pointer p-2 rounded-md"
+                                            onClick={() => (window.location.href = `/chat/${chat.id}`)}
+                                        >
+                                            {chat.id.slice(0, 40)}...
+                                        </div>
+                                    ))}
+                                </div>
+                            </>
+                        ) : null}
+                    </div>
                 )}
             </aside>
 
-
+            {/* Chat Area */}
             <main className="flex-1 flex flex-col">
-                <div className="flex-1 overflow-y-auto p-6 flex flex-col gap-4">
+                <div className="flex-1 overflow-y-auto p-4 space-y-4">
                     {loading ? (
                         <>
                             <Shimmer className="w-2/3 h-6 rounded-xl self-start" />
                             <Shimmer className="w-1/2 h-6 rounded-xl self-end" />
-                            <Shimmer className="w-2/3 h-6 rounded-xl self-start" />
-                            <Shimmer className="w-1/3 h-6 rounded-xl self-end" />
                         </>
-                    ) : (
-                        messages.map((msg, idx) => (
+                    ) : messages.map((msg, idx) => (
+                        <div
+                            key={idx}
+                            className={`flex ${msg.from === "user" ? "justify-end" : "justify-start"}`}
+                        >
                             <div
-                                key={idx}
-                                className={`max-w-sm md:max-w-md px-4 py-3 rounded-xl shadow ${
-                                    msg.from === "user"
-                                        ? "bg-indigo-500 text-white self-end"
-                                        : "bg-indigo-100 text-indigo-900 self-start"
+                                className={`max-w-xs sm:max-w-sm md:max-w-md px-4 py-3 rounded-xl shadow
+                                 ${msg.from === "user"
+                                    ? "bg-indigo-500 text-white"
+                                    : "bg-indigo-100 text-indigo-900"
                                 }`}
                             >
-                                <div className="text-sm">{msg.text}</div>
+                                <div className="prose prose-sm max-w-none text-sm">
+                                    <ReactMarkdown>{msg.text}</ReactMarkdown>
+                                </div>
                                 <div className="text-xs text-gray-500 mt-1 text-right">{msg.time}</div>
                             </div>
-                        ))
-                    )}
+                        </div>
+                    ))
+                    }
 
                     {isTyping && !loading && (
                         <div className="self-start bg-gray-100 text-gray-800 px-4 py-3 rounded-xl shadow max-w-xs flex items-center gap-1">
@@ -217,11 +279,10 @@ export default function Chat() {
                             <span className="dot animate-bounce delay-400" />
                         </div>
                     )}
-
                     <div ref={messagesEndRef} />
                 </div>
 
-                {/* Input Field */}
+                {/* Input */}
                 <form onSubmit={handleSubmit} className="p-4 border-t flex gap-2 bg-white">
                     <input
                         type="text"
@@ -239,30 +300,32 @@ export default function Chat() {
                 </form>
             </main>
 
-            {/* Typing Animation Styles */}
+            {/* Bouncing dots */}
             <style jsx>{`
-        .dot {
-          width: 8px;
-          height: 8px;
-          background-color: #6366f1;
-          border-radius: 50%;
-        }
-
-        .animate-bounce {
-          animation: bounce 1s infinite ease-in-out;
-        }
-
-        @keyframes bounce {
-          0%,
-          80%,
-          100% {
-            transform: scale(0);
-          }
-          40% {
-            transform: scale(1);
-          }
-        }
-      `}</style>
+                .dot {
+                    width: 8px;
+                    height: 8px;
+                    background-color: #6366f1;
+                    border-radius: 50%;
+                }
+                .animate-bounce {
+                    animation: bounce 1s infinite ease-in-out;
+                }
+                .delay-200 {
+                    animation-delay: 0.2s;
+                }
+                .delay-400 {
+                    animation-delay: 0.4s;
+                }
+                @keyframes bounce {
+                    0%, 80%, 100% {
+                        transform: scale(0);
+                    }
+                    40% {
+                        transform: scale(1);
+                    }
+                }
+            `}</style>
         </div>
     );
 }
