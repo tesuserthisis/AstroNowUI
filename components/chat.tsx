@@ -196,7 +196,7 @@ export default function Chat() {
             </div>
 
             {/* Sidebar (Astrologer Info + Chat History) */}
-            <aside className={`w-full md:w-80 border-r shadow p-4 md:block ${showAstroInfo || showChatHistory ? "block" : "hidden"} md:!block`}>
+            <aside className={`w-full md:w-80 border-r shadow p-4 flex flex-col ${showAstroInfo || showChatHistory ? "block" : "hidden"} md:flex`}>
                 {showAstroInfo || !showChatHistory ? (
                     loading || !astrologer ? (
                         <>
@@ -224,7 +224,7 @@ export default function Chat() {
                         ) : chatHistory && chatHistory.related_chats.length > 0 ? (
                             <>
                                 <h3 className="text-sm font-semibold text-gray-700 mb-2">Past Chats</h3>
-                                <div className="space-y-2 max-h-64 overflow-y-auto">
+                                <div className="space-y-2 overflow-y-auto">
                                     {chatHistory.related_chats.map((chat) => (
                                         <div
                                             key={chat.id}
@@ -242,7 +242,7 @@ export default function Chat() {
             </aside>
 
             {/* Chat Area */}
-            <main className="flex-1 flex flex-col">
+            <main className="flex-1 flex flex-col bg-white">
                 <div className="flex-1 overflow-y-auto p-4 space-y-4">
                     {loading ? (
                         <>
