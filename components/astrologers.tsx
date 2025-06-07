@@ -6,9 +6,11 @@ import "swiper/css/effect-coverflow";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import SwiperCore from "swiper";
 import {astrologers} from "@/components/utils/const";
+import { useRouter } from "next/navigation";
 
 export default function AstrologersSection() {
     const swiperRef = useRef<SwiperCore | null>(null);
+    const router = useRouter();
 
     return (
         <section id="astrologers" className="px-4 py-8 md:p-12 text-white text-center">
@@ -35,7 +37,8 @@ export default function AstrologersSection() {
             >
                 {astrologers.map((astro, index) => (
                     <SwiperSlide key={index} className="transform transition-transform duration-300 px-2">
-                        <div className="relative flex flex-col items-center bg-gray-900 p-4 rounded-xl shadow-lg">
+                        <div onClick={() => router.push(`/astro-agents`)}
+                             className="relative flex flex-col items-center bg-gray-900 p-4 rounded-xl shadow-lg cursor-pointer transform transition duration-300 hover:scale-105 hover:shadow-2xl focus:outline-none">
                             <img
                                 src={astro.image}
                                 alt={astro.name}
