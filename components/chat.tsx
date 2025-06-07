@@ -88,11 +88,9 @@ export default function Chat() {
 
         const fetchChatHistory = async () => {
             try {
-                // session?.user?.mappedUser?.id='674e6a93-0729-412f-adad-6a27eb697cdb';
-                // if (!session?.user?.mappedUser?.id) return;
                 setLoadingHistory(true)
                 const res = await fetch(
-                    `https://astronowai.fly.dev/chats/${id}?user_id=${'674e6a93-0729-412f-adad-6a27eb697cdb'}`
+                    `https://astronowai.fly.dev/chats/${id}?user_id=${session?.user?.mappedUser?.id}`
                 );
 
                 const data: PastChats = await res.json();
